@@ -6,9 +6,12 @@ namespace board
 
 class GameBoardIntf_t
 {
-    virtual void GetResourceList();
+    const std::vector< std::vector< ResourceType_t > > GetBoardState() const override;
 
-    virtual void GetBoardState();
+    bool AddResource( ResourceTypes aResourceType, int xPosition, int yPosition) override;
+    bool RemoveResource( ResourceTypes aResourceType, int xPosition, int yPosition) override;
+
+    std::vector< std::vector < ResourceType_t > > UndoMove() override;
 };
 
 } // ENDOF board
