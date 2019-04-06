@@ -1,37 +1,61 @@
 #include "Gameboard.hpp"
 
-engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY ){
+#include "engine/board/Types.hpp"
+
+engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY )
+:
+mBoard{}
+{
     AllocateBoard( aBoardSizeX, aBoardSizeY );
 }
 
-engine::board::GameBoard_t::AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY ) {
+void engine::board::GameBoard_t::AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY ) {
     mBoard = std::make_unique< BoardArray2D_t >( aBoardSizeX );
     for( int i = 0; i < aBoardSizeX; i++ ) {
         mBoard[i] = std::make_unique< BoardArray1D_t >( aBoardSizeY );
     }
 }
 
-std::vector< MoveError_t > engine::board::GameBoard_t::RunMoves( std::vector< game::engine::GameBoardMove_t > aMoves ) {
+std::vector< engine::board::MoveResult_t > engine::board::GameBoard_t::RunMoves( std::vector< engine::board::GameBoardMove_t > aMoves ) {        
+    std::vector< engine::board::MoveResult_t > moveResults;
+    
     for( auto& aMove : aMoves ) {
         if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
-            AddResource( aMove );
+            moveResults.push_back( AddResource( aMove ) );
         } else if ( aMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
-            RemoveResource( aMove );
+            moveReesults.push_back( RemoveResource( aMove ) );
         } else {
-            // unknown move type
+            moveResults.push_back( engine::board::MoveResult_t::UNKNOWNMOVE );
         }
     }
+
+    return moveResults;
 }
 
-MoveError_t engine::board::GameBoard_t::AddResource( game::engine::GameBoardMove_t aMove  ) {
+engine::board::MoveResult_t engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t aMove  ) {
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
 
-    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ] = aResource;
+    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 )
+    {
+        return engine::board::MoveResult_t::OUTOFBOUNDS;
+    }
+
+    mBoard[ moveX ][ moveY ] = aMove.Resource;
+    return engine::board::MoveResult_t::SUCCESS;
 }
 
-bool engine::board::GameBoard_t::RemoveResource( game::engine::GameBoardMove_t aMove ) {
-    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ] = ResourceType_t::EMPTY:
+engine::board::MoveResult_t engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t aMove ) {
+    auto moveX = aMove.MoveIndexX;
+    auto moveY = aMove.MoveIndexY;
+    
+    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 )
+    {
+        return engine::board::MoveResult_t::OUTOFBOUNDS;
+    }
+    
+    mBoard[ moveX ][ moveY ] = ResourceType_t::EMPTY;
+    return engine::board::MoveResult_t::SUCCESS;
 }
 
 

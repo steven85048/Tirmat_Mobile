@@ -1,13 +1,10 @@
+#include "engine/board/Types.hpp"
+
 namespace engine
 {
 
 namespace board
 {
-
-enum class MoveType_t {
-    ADDRESOURCE,
-    REMOVERESOURCE
-}
 
 // --------------------------------------------------------
 class GameBoardMove_t {
@@ -22,6 +19,8 @@ GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )
 MoveType( aMoveType ),
 MoveIndexX( aMoveIndexX ),
 MoveIndexY( aMoveIndexY )
+{
+}
 
 // --------------------------------------------------------
 public: // DATA
@@ -32,7 +31,7 @@ int MoveIndexX;
 int MoveIndexY;
 engine::board::ResourceType_t Resource;
 
-}
+};
 
 } // END of board
 } // END of engine
