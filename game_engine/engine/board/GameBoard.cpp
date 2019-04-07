@@ -23,7 +23,7 @@ std::vector< engine::board::MoveResult_t > engine::board::GameBoard_t::RunMoves(
         if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
             moveResults.push_back( AddResource( aMove ) );
         } else if ( aMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
-            moveReesults.push_back( RemoveResource( aMove ) );
+            moveResults.push_back( RemoveResource( aMove ) );
         } else {
             moveResults.push_back( engine::board::MoveResult_t::UNKNOWNMOVE );
         }
