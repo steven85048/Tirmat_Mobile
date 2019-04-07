@@ -11,6 +11,7 @@ enum class MoveType_t {
 
 enum class ResourceType_t {
     EMPTY,
+    IGNORE,
     L1,
     L2,
     L3,
