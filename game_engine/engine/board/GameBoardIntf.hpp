@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "engine/board/GameBoard.hpp"
 #include "engine/board/Types.hpp"
 
 namespace engine
@@ -10,12 +11,11 @@ namespace board
 
 class GameBoardIntf_t
 {
-    const std::vector< std::vector< ResourceType_t > > GetBoardState() const;
-
-    bool AddResource( engine::board::ResourceType_t aResourceType, int xPosition, int yPosition);
-    bool RemoveResource( engine::board::ResourceType_t aResourceType, int xPosition, int yPosition);
-
-    std::vector< std::vector < ResourceType_t > > UndoMove();
+public:
+    virtual const engine::board::GameBoard_t::BoardArray2D_t& GetBoardState() const = 0;
+    virtual std::vector< engine::board::MoveResult_t > RunMoves( const std::vector< engine::board::GameBoardMove_t >& aMoves ) = 0;
+    virtual void CommitStagedBoard() = 0;
+    virtual bool UndoMove() = 0; 
 };
 
 } // ENDOF board

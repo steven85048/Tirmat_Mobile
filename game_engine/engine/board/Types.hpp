@@ -30,7 +30,7 @@ enum class MoveResult_t {
 struct BoardCellState_t {
     ResourceType_t Resource;
     bool Locked = false;
-}
+};
 
 struct GameBoardMove_t {
 

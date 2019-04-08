@@ -5,7 +5,6 @@
 
 #include "engine/board/GameBoardIntf.hpp"
 #include "engine/board/Types.hpp"
-#include "engine/board/GameBoardMove.hpp"
 
 namespace engine
 {
@@ -34,7 +33,10 @@ public: // GameBoardIntf_t overrides
 // --------------------------------------------------------
 
 const BoardArray2D_t& GetBoardState() const override;
-std::vector< MoveResult_t > RunMoves( std::vector< engine::board::GameBoardMove_t > aMoves ) override;
+
+std::vector< MoveResult_t > RunMoves( const std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
+void CommitStagedBoard() override;
+
 bool UndoMove() override;
 
 // --------------------------------------------------------
@@ -52,6 +54,7 @@ private: // DATA
 
     // We want to make sure ONLY this class can make copy to the "real" version of the board
     BoardArray2D_t mBoard;
+    BoardArray2D_t mStagedBoard;
     std::stack< std::vector< engine::board::GameBoardMove_t > > mPreviousMoves;
 };
 
