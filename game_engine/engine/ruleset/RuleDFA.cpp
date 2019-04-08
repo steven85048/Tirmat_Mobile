@@ -10,10 +10,27 @@ mDFAStartNode( std::make_unique< engine::ruleset::DFANode_t >() )
 }
 
 void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aRule ) {
+    auto& theCurrentState = *mDFAStartNode;
 
+    // Generate the input string from the points;
+    // It traverses the point space in a zig-zag format
+    auto theInputString = ConvertPointsToLanguage( aRule.RulePoints );
+
+    for( auto& theInputCharacter : theInputString ) {
+        // Using structs as keys are annoying, so we just use a pair
+        std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
+
+        // Similar to Trie! We continue the tree traversal if the transition exists, and create a new node if it doesn't
+        if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
+            auto theNewNode = std::make_unique< engine::ruleset::DFANode_t >();
+            theCurrentState.Transition[inputCharacterPair] = std::move( theNewNode );
+        }
+
+        theCurrentState = *theCurrentState.Transition[inputCharacterPair];
+    }
 }
 
-std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( std::vector< engine::ruleset::Point_t >& aRulePoints ) {
+std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< engine::ruleset::Point_t >& aRulePoints ) {
     std::vector< engine::ruleset::LanguageInputCharacter_t > inputString;
     
     if( aRulePoints.size() == 0 ) {
@@ -59,7 +76,7 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
     return inputString;
 }
 
-engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( std::vector< engine::ruleset::Point_t >& aRulePoints ) {
+engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< engine::ruleset::Point_t >& aRulePoints ) {
 
     engine::ruleset::PointBounds_t theBounds {};
 

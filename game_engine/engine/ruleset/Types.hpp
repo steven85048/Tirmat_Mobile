@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "engine/board/Types.hpp"
 
@@ -21,7 +22,7 @@ struct LanguageInputCharacter_t {
     engine::board::ResourceType_t Resource;
 };
 
-struct PointBounds {
+struct PointBounds_t {
     PointLocation_t LeftTopCorner;
     int recWidth;
     int recHeight;
@@ -30,7 +31,7 @@ struct PointBounds {
 struct DFANode_t {
     bool IsLevelCompletionNode = false;
     bool IsAcceptingNode = false;
-    std::map< LanguageDirection_t, engine::board::ResourceType_t > Transition;
+    std::map< std::pair< LanguageDirection_t, engine::board::ResourceType_t >, std::unique_ptr< DFANode_t > > Transition;
     std::vector< Point_t > Generating;
 };
 

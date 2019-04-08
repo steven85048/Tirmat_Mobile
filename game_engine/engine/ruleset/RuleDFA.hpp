@@ -23,8 +23,8 @@ private: // FUNCTIONS
 // --------------------------------------------------------
 
 void AddRuleToDFA( const engine::ruleset::Rule_t& aRule );
-std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( std::vector< engine::ruleset::Point_t >& aRulePoints );
-engine::ruleset::PointBounds_t GetBoundsFromPoints( std::vector< engine::ruleset::Point_t >& aRulePoints );
+std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( const std::vector< engine::ruleset::Point_t >& aRulePoints );
+engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< engine::ruleset::Point_t >& aRulePoints );
 
 
 // --------------------------------------------------------
