@@ -23,7 +23,7 @@ RuleDFA_t();
 void AddRuleToDFA( const engine::ruleset::Rule_t& aRule );
 
 // Passes the input points through the DFA and outputs whether or not the shape matches successfully
-engine::ruleset::DFAPassResponse_t PassShapeThroughDFA( const std::vector< engine::ruleset::Point_t >& aRulePoints );
+engine::ruleset::DFAPassResponse_t PassShapeThroughDFA( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
 
 // Reset the DFA state
 void Reset();
@@ -34,10 +34,10 @@ private: // FUNCTIONS
 
 // Generate the input string from the points;
 // It traverses the point space in a zig-zag format
-std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( const std::vector< engine::ruleset::Point_t >& aRulePoints );
+std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
 
 // Obtains the bounds of a set of points; used to create the input string
-engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< engine::ruleset::Point_t >& aRulePoints );
+engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
 
 
 // --------------------------------------------------------

@@ -9,7 +9,7 @@ mDFAStartNode( std::make_unique< engine::ruleset::DFANode_t >() )
 {  
 }
 
-engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< engine::ruleset::Point_t >& aShapePoints ) {
+engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< engine::board::BoardCellState_t >& aShapePoints ) {
     auto& theCurrentState = *mDFAStartNode;
 
     engine::ruleset::DFAPassResponse_t theResponse{};
@@ -66,7 +66,7 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
     theCurrentState.Generating = aRule.GeneratePoints;
 }
 
-std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< engine::ruleset::Point_t >& aRulePoints ) {
+std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< engine::board::BoardCellState_t >& aRulePoints ) {
     std::vector< engine::ruleset::LanguageInputCharacter_t > inputString;
     
     if( aRulePoints.size() == 0 ) {
@@ -112,7 +112,7 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
     return inputString;
 }
 
-engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< engine::ruleset::Point_t >& aRulePoints ) {
+engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< engine::board::BoardCellState_t >& aRulePoints ) {
 
     engine::ruleset::PointBounds_t theBounds {};
 
@@ -143,7 +143,7 @@ engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( 
         }
     }
 
-    theBounds.LeftTopCorner = engine::ruleset::PointLocation_t{ xLowCorner, yLowCorner };
+    theBounds.LeftTopCorner = engine::board::PointLocation_t{ xLowCorner, yLowCorner };
     theBounds.recWidth = xHighCorner - xLowCorner;
     theBounds.recHeight = yHighCorner - yLowCorner;
 

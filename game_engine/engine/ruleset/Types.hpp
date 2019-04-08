@@ -22,7 +22,7 @@ enum class LanguageDirection_t {
 
 struct DFAPassResponse_t {
     DFAResponseType_t ResponseType = DFAResponseType_t::UNKNOWN;
-    std::vector< Point_t > GeneratingPoints;
+    std::vector< engine::board::BoardCellState_t > GeneratingPoints;
 };
 
 enum class DFAResponseType_t {
@@ -38,7 +38,7 @@ struct LanguageInputCharacter_t {
 };
 
 struct PointBounds_t {
-    PointLocation_t LeftTopCorner;
+    engine::board::PointLocation_t LeftTopCorner;
     int recWidth;
     int recHeight;
 };
@@ -47,23 +47,13 @@ struct DFANode_t {
     bool IsLevelCompletionNode = false;
     bool IsAcceptingNode = false;
     std::map< std::pair< LanguageDirection_t, engine::board::ResourceType_t >, std::unique_ptr< DFANode_t > > Transition;
-    std::vector< Point_t > Generating;
-};
-
-struct PointLocation_t {
-    int xPos;
-    int yPos;
-};
-
-struct Point_t{
-    PointLocation_t Location;
-    engine::board::ResourceType_t Resource;
+    std::vector< engine::board::BoardCellState_t > Generating;
 };
 
 struct Rule_t{
     bool IsLevelCompletionRule = false;
-    std::vector< Point_t > RulePoints;
-    std::vector< Point_t > GeneratePoints;
+    std::vector< engine::board::BoardCellState_t > RulePoints;
+    std::vector< engine::board::BoardCellState_t > GeneratePoints;
 };
 
 } // ENDOF ruleset

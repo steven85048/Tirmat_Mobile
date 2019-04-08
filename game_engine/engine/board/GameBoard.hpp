@@ -23,8 +23,8 @@ class GameBoard_t : public GameBoardIntf_t {
 public: // TYPES
 // --------------------------------------------------------
 
-using BoardArray1D_t = std::unique_ptr< BoardCellState_t >[];
-using BoardArray2D_t = std::unique_ptr< BoardArray1D_t >[];
+using BoardArray1D_t = std::shared_ptr< BoardCellState_t >[];
+using BoardArray2D_t = std::shared_ptr< BoardArray1D_t >[];
 
 GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 
@@ -39,6 +39,9 @@ void CommitStagedBoard() override;
 
 bool UndoMove() override;
 
+std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const override;
+std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos, int yPos ) const override;
+
 // --------------------------------------------------------
 private: // FUNCTIONS
 // --------------------------------------------------------
@@ -47,6 +50,8 @@ void AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 
 MoveResult_t AddResource( engine::board::GameBoardMove_t aMoves );
 MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
+
+bool IsValidPosition( int moveX, int moveY ) const;
 
 // --------------------------------------------------------
 private: // DATA

@@ -28,6 +28,9 @@
         "xutility": "cpp",
         "xtree": "cpp",
         "map": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "list": "cpp",
+        "unordered_set": "cpp",
+        "xhash": "cpp"
     }
 }

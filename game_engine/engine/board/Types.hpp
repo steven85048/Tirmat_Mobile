@@ -27,7 +27,13 @@ enum class MoveResult_t {
     LOCKED
 };
 
+struct PointLocation_t {
+    int xPos;
+    int yPos;
+};
+
 struct BoardCellState_t {
+    PointLocation_t Location;
     ResourceType_t Resource;
     bool Locked = false;
 };
