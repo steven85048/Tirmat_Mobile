@@ -31,6 +31,7 @@
         "tuple": "cpp",
         "list": "cpp",
         "unordered_set": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "optional": "cpp"
     }
 }

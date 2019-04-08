@@ -23,8 +23,8 @@ class GameBoard_t : public GameBoardIntf_t {
 public: // TYPES
 // --------------------------------------------------------
 
-using BoardArray1D_t = std::shared_ptr< BoardCellState_t >[];
-using BoardArray2D_t = std::shared_ptr< BoardArray1D_t >[];
+using BoardArray1D_t = std::shared_ptr< std::shared_ptr< BoardCellState_t >[] >;
+using BoardArray2D_t = std::shared_ptr< BoardArray1D_t[] >;
 
 GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 
@@ -46,7 +46,7 @@ std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos,
 private: // FUNCTIONS
 // --------------------------------------------------------
 
-void AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
+std::shared_ptr< BoardArray2D_t > AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 
 MoveResult_t AddResource( engine::board::GameBoardMove_t aMoves );
 MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
@@ -60,6 +60,7 @@ private: // DATA
     // We want to make sure ONLY this class can make copy to the "real" version of the board
     BoardArray2D_t mBoard;
     BoardArray2D_t mStagedBoard;
+
     std::stack< std::vector< engine::board::GameBoardMove_t > > mPreviousMoves;
 };
 

@@ -1,20 +1,30 @@
+#include <memory>
+
 #include "Gameboard.hpp"
 
 #include "engine/board/Types.hpp"
 
 engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY )
 :
-mBoard{},
-mStagedBoard{}
+mBoard{ std::move( AllocateBoard( aBoardSizeX, aBoardSizeY ) ) },
+mStagedBoard{ std::move( AllocateBoard( aBoardSizeX, aBoardSizeY ) ) }
 {
-    AllocateBoard( aBoardSizeX, aBoardSizeY );
 }
 
-void engine::board::GameBoard_t::AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY ) {
-    mBoard = std::make_shared< BoardArray2D_t >( aBoardSizeX );
+engine::board::GameBoard_t::BoardArray2D_t engine::board::GameBoard_t::AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY ) {
+    BoardArray2D_t theNewBoard ( new BoardArray1D_t[ aBoardSizeX ] );
     for( int i = 0; i < aBoardSizeX; i++ ) {
-        mBoard[i] = std::make_shared< BoardArray1D_t >( aBoardSizeY );
+        BoardArray1D_t theColumn ( new engine::board::BoardCellState_t[ aBoardSizeY ] );
+
+        for( int j = 0; j < aBoardSizeY; j++ ) {
+            auto theCell = std::make_shared< engine::board::BoardCellState_t >();
+            theColumn[j] = theCell;
+        }
+
+        theNewBoard[i] = std::move( theColumn );
     }
+
+    return theNewBoard;
 }
 
 std::shared_ptr< engine::board::BoardCellState_t > engine::board::GameBoard_t::GetCellState( int xPos, int yPos ) const {    
@@ -90,5 +100,5 @@ engine::board::MoveResult_t engine::board::GameBoard_t::RemoveResource( engine::
 }
 
 bool engine::board::GameBoard_t::IsValidPosition( int moveX, int moveY ) const {
-    return moveX >= mBoard.size() || moveX < 0 || moveY >= mBoard.at(0).size() || moveY < 0;
+    return moveX >= mBoard->size() || moveX < 0 || moveY >= mBoard.->at(0).size() || moveY < 0;
 }
