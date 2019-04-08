@@ -9,13 +9,41 @@ mDFAStartNode( std::make_unique< engine::ruleset::DFANode_t >() )
 {  
 }
 
+engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< engine::ruleset::Point_t >& aShapePoints ) {
+    auto& theCurrentState = *mDFAStartNode;
+
+    engine::ruleset::DFAPassResponse_t theResponse{};
+
+    auto theInputString = ConvertPointsToLanguage( aShapePoints );
+    for( auto& theInputCharacter : theInputString ) {
+        std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
+        if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
+            theResponse.ResponseType = engine::ruleset::DFAResponseType_t::NOMATCH;
+            return theResponse;
+        }
+
+        theCurrentState = *theCurrentState.Transition[inputCharacterPair];
+    }
+
+    if( !theCurrentState.IsAcceptingNode ) {
+        theResponse.ResponseType = engine::ruleset::DFAResponseType_t::NOMATCH;
+        return theResponse;
+    }
+
+    theResponse.GeneratingPoints = theCurrentState.Generating;
+    if( theCurrentState.IsLevelCompletionNode ) {
+        theResponse.ResponseType = engine::ruleset::DFAResponseType_t::LEVELCOMPLETION;
+    } else if ( theCurrentState.IsAcceptingNode ) {
+        theResponse.ResponseType = engine::ruleset::DFAResponseType_t::GENERATING;
+    }
+
+    return theResponse;
+}
+
 void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aRule ) {
     auto& theCurrentState = *mDFAStartNode;
 
-    // Generate the input string from the points;
-    // It traverses the point space in a zig-zag format
     auto theInputString = ConvertPointsToLanguage( aRule.RulePoints );
-
     for( auto& theInputCharacter : theInputString ) {
         // Using structs as keys are annoying, so we just use a pair
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
@@ -28,6 +56,14 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
 
         theCurrentState = *theCurrentState.Transition[inputCharacterPair];
     }
+
+    if( theCurrentState.IsAcceptingNode ) {
+        // ERROR! There is a duplicate rule in the set.
+    }
+
+    theCurrentState.IsAcceptingNode = true;
+    theCurrentState.IsLevelCompletionNode = aRule.IsLevelCompletionRule;
+    theCurrentState.Generating = aRule.GeneratePoints;
 }
 
 std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< engine::ruleset::Point_t >& aRulePoints ) {

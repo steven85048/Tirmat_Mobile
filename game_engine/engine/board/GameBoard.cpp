@@ -36,12 +36,15 @@ engine::board::MoveResult_t engine::board::GameBoard_t::AddResource( engine::boa
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
 
-    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 )
-    {
+    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 ){
         return engine::board::MoveResult_t::OUTOFBOUNDS;
     }
 
-    mBoard[ moveX ][ moveY ] = aMove.Resource;
+    if( mBoard[ moveX ][ moveY ].Locked ) {
+        return engine::board::MoveResult_t::LOCKED;
+    }
+
+    mBoard[ moveX ][ moveY ].Resource = aMove.Resource;
     return engine::board::MoveResult_t::SUCCESS;
 }
 
@@ -49,12 +52,15 @@ engine::board::MoveResult_t engine::board::GameBoard_t::RemoveResource( engine::
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
     
-    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 )
-    {
+    if( moveX >= aMove.MoveIndexX || moveX < 0 || moveY >= aMove.MoveIndexY || moveY < 0 ){
         return engine::board::MoveResult_t::OUTOFBOUNDS;
     }
+
+    if( mBoard[ moveX ][ moveY ].Locked ) {
+        return engine::board::MoveResult_t::LOCKED;
+    }
     
-    mBoard[ moveX ][ moveY ] = ResourceType_t::EMPTY;
+    mBoard[ moveX ][ moveY ].Resource = ResourceType_t::EMPTY;
     return engine::board::MoveResult_t::SUCCESS;
 }
 

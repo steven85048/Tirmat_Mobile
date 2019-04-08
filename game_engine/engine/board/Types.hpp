@@ -23,7 +23,29 @@ enum class ResourceType_t {
 enum class MoveResult_t {
     SUCCESS,
     OUTOFBOUNDS,
-    UNKNOWNMOVE
+    UNKNOWNMOVE,
+    LOCKED
+};
+
+struct BoardCellState_t {
+    ResourceType_t Resource;
+    bool Locked = false;
+}
+
+struct GameBoardMove_t {
+
+    GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )
+    :
+    MoveType( aMoveType ),
+    MoveIndexX( aMoveIndexX ),
+    MoveIndexY( aMoveIndexY )
+    {
+    }
+
+    MoveType_t MoveType;
+    int MoveIndexX;
+    int MoveIndexY;
+    engine::board::ResourceType_t Resource;
 };
 
 } // ENDOF board

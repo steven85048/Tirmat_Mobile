@@ -11,10 +11,25 @@ namespace engine
 namespace ruleset
 {
 
+// Technically, only use EAST and SOUTH but we can get more
+// lines in Github with 4
 enum class LanguageDirection_t {
+    NORTH,
     EAST,
     SOUTH,
     WEST
+};
+
+struct DFAPassResponse_t {
+    DFAResponseType_t ResponseType = DFAResponseType_t::UNKNOWN;
+    std::vector< Point_t > GeneratingPoints;
+};
+
+enum class DFAResponseType_t {
+    NOMATCH,
+    GENERATING,
+    LEVELCOMPLETION,
+    UNKNOWN
 };
 
 struct LanguageInputCharacter_t {

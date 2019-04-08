@@ -24,7 +24,7 @@ class GameBoard_t : public GameBoardIntf_t {
 public: // TYPES
 // --------------------------------------------------------
 
-using BoardArray1D_t = std::unique_ptr< ResourceType_t >[];
+using BoardArray1D_t = std::unique_ptr< BoardCellState_t >[];
 using BoardArray2D_t = std::unique_ptr< BoardArray1D_t >[];
 
 GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
