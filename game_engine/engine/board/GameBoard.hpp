@@ -51,6 +51,9 @@ MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
 
 bool IsValidPosition( int moveX, int moveY ) const;
 
+// For Testing
+void PrintBoard();
+
 // --------------------------------------------------------
 private: // DATA
 // --------------------------------------------------------

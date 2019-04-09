@@ -1,4 +1,5 @@
 #include <memory>
+#include <iostream>
 
 #include "GameBoard.hpp"
 
@@ -83,7 +84,11 @@ engine::board::MoveResult_t engine::board::GameBoard_t::AddResource( engine::boa
         return engine::board::MoveResult_t::LOCKED;
     }
 
-    mStagedBoard[ moveX ][ moveY ]->Resource = aMove.Resource;
+    if( !aMove.Resource ) {
+        return engine::board::MoveResult_t::RESOURCEUNSET;
+    }
+
+    mStagedBoard[ moveX ][ moveY ]->Resource = *aMove.Resource;
     return engine::board::MoveResult_t::SUCCESS;
 }
 
@@ -104,5 +109,18 @@ engine::board::MoveResult_t engine::board::GameBoard_t::RemoveResource( engine::
 }
 
 bool engine::board::GameBoard_t::IsValidPosition( int moveX, int moveY ) const {
-    return moveX >= mBoardWidth || moveX < 0 || moveY >= mBoardHeight || moveY < 0;
+    return moveX < mBoardWidth && moveX >= 0 && moveY < mBoardHeight && moveY >= 0;
+}
+
+void engine::board::GameBoard_t::PrintBoard() {
+    std::cout << std::endl;
+    static const std::string ResourceTypeString[8] = { "EMPTY", "IGNORE", "L1", "L2", "L3", "L4", "L5", "L6" };
+
+    for( int j = 0; j < mBoardHeight; j++ ) {
+        for( int i = 0 ; i < mBoardWidth; i++ ) {
+            std::cout << engine::board::EnumStrings_t::ResourceToString( mBoard[i][j]->Resource ) << " ";
+        } 
+
+        std::cout << std::endl;
+    }
 }
