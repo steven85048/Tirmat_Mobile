@@ -24,31 +24,6 @@ enum class ResourceType_t {
     L6
 };
 
-struct EnumStrings_t {
-    static std::string ResourceToString( ResourceType_t theType ) {
-        switch( theType ) {
-            case ResourceType_t::EMPTY:
-                return "0";
-            case ResourceType_t::IGNORE: 
-                return "-1";
-            case ResourceType_t::L1: 
-                return "1";
-            case ResourceType_t::L2: 
-                return "2";
-            case ResourceType_t::L3: 
-                return "3";
-            case ResourceType_t::L4: 
-                return "4";
-            case ResourceType_t::L5: 
-                return "5";
-            case ResourceType_t::L6: 
-                return "6";   
-        }
-
-        return "UNKNOWN";
-    }
-};
-
 enum class MoveResult_t {
     SUCCESS,
     OUTOFBOUNDS,
@@ -73,6 +48,7 @@ struct BoardCellState_t {
     }
 };
 
+// Note that Resource MUST be set if you are adding a resource!
 struct GameBoardMove_t {
 
     GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )

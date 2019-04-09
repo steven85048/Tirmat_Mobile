@@ -2,6 +2,7 @@
 
 #include <stack>
 #include <memory>
+#include <vector>
 
 #include "engine/board/GameBoardIntf.hpp"
 #include "engine/board/Types.hpp"
