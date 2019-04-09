@@ -4,6 +4,7 @@
 #include "GameBoard.hpp"
 
 #include "engine/board/Types.hpp"
+#include "engine/utilities/Logging.hpp"
 
 engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY )
 :
@@ -118,7 +119,7 @@ void engine::board::GameBoard_t::PrintBoard() {
 
     for( int j = 0; j < mBoardHeight; j++ ) {
         for( int i = 0 ; i < mBoardWidth; i++ ) {
-            std::cout << engine::board::EnumStrings_t::ResourceToString( mBoard[i][j]->Resource ) << " ";
+            std::cout << engine::utilities::EnumStrings_t::ResourceToString( mBoard[i][j]->Resource ) << " ";
         } 
 
         std::cout << std::endl;
