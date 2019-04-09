@@ -28,10 +28,10 @@ void ExecuteMoves( std::vector< engine::board::GameBoardMove_t > aMoves );
 private: // FUNCTIONS
 // --------------------------------------------------------
 
-void AddResource( int xPos, int yPos, engine::board::ResourceType_t aResource );
+void AddResource( int xPos, int yPos );
 void RemoveResource( int xPos, int yPos );
 
-std::shared_ptr< std::vector< engine::board::BoardCellState_t > > GetNeighborSets( int xPos, int yPos );
+std::shared_ptr< std::vector< std::shared_ptr< engine::board::BoardCellState_t > > > GetNeighborSets( int xPos, int yPos );
 std::vector< engine::board::PointLocation_t > GetValidNeighbors( int xPos, int yPos );
 
 // --------------------------------------------------------
@@ -39,7 +39,7 @@ private: // DATA
 // --------------------------------------------------------
 
 std::shared_ptr< engine::board::GameBoardIntf_t > mGameBoard; 
-std::map< std::pair< int, int >, std::shared_ptr< std::vector< engine::board::BoardCellState_t > > > mLocationToPointSetMap;
+std::map< std::pair< int, int >, std::shared_ptr< std::vector< std::shared_ptr< engine::board::BoardCellState_t > > > > mLocationToPointSetMap;
 
 };
 

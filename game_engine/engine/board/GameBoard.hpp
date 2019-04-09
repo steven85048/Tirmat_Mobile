@@ -40,6 +40,9 @@ void CommitStagedBoard() override;
 std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const override;
 std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos, int yPos ) const override;
 
+// For Testing
+void PrintBoard();
+
 // --------------------------------------------------------
 private: // FUNCTIONS
 // --------------------------------------------------------
@@ -51,9 +54,6 @@ MoveResult_t AddResource( engine::board::GameBoardMove_t aMoves );
 MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
 
 bool IsValidPosition( int moveX, int moveY ) const;
-
-// For Testing
-void PrintBoard();
 
 // --------------------------------------------------------
 private: // DATA
