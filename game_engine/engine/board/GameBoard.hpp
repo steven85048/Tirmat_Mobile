@@ -23,8 +23,9 @@ class GameBoard_t : public GameBoardIntf_t {
 public: // TYPES
 // --------------------------------------------------------
 
-using BoardArray1D_t = std::shared_ptr< std::shared_ptr< BoardCellState_t >[] >;
-using BoardArray2D_t = std::shared_ptr< BoardArray1D_t[] >;
+// We store shared pointers since we store these cell states elsewhere, notably in the shapesetmanager
+using BoardArray1D_t = std::vector< std::shared_ptr< engine::board::BoardCellState_t > >;
+using BoardArray2D_t = std::vector< BoardArray1D_t >;
 
 GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 
@@ -32,12 +33,8 @@ GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 public: // GameBoardIntf_t overrides
 // --------------------------------------------------------
 
-const BoardArray2D_t& GetBoardState() const override;
-
 std::vector< MoveResult_t > RunMoves( const std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
 void CommitStagedBoard() override;
-
-bool UndoMove() override;
 
 std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const override;
 std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos, int yPos ) const override;
@@ -46,7 +43,8 @@ std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos,
 private: // FUNCTIONS
 // --------------------------------------------------------
 
-std::shared_ptr< BoardArray2D_t > AllocateBoard( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
+// Allocates heap memory for the board
+BoardArray2D_t AllocateBoard();
 
 MoveResult_t AddResource( engine::board::GameBoardMove_t aMoves );
 MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
@@ -56,6 +54,9 @@ bool IsValidPosition( int moveX, int moveY ) const;
 // --------------------------------------------------------
 private: // DATA
 // --------------------------------------------------------
+
+    std::size_t mBoardWidth;
+    std::size_t mBoardHeight;
 
     // We want to make sure ONLY this class can make copy to the "real" version of the board
     BoardArray2D_t mBoard;

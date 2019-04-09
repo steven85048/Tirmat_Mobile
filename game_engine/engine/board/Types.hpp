@@ -1,3 +1,5 @@
+#pragma once
+
 namespace engine
 {
 
@@ -36,6 +38,11 @@ struct BoardCellState_t {
     PointLocation_t Location;
     ResourceType_t Resource;
     bool Locked = false;
+
+    BoardCellState_t( int xPos, int yPos ) {
+        Location.xPos = xPos;
+        Location.yPos = yPos;
+    }
 };
 
 struct GameBoardMove_t {
