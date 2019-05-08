@@ -2,7 +2,6 @@
 # Allows us to easily test just this library
 
 cmake_minimum_required(VERSION 3.5)
-set (CMAKE_CXX_STANDARD 17)
 
 # Define the source and header files in our project
 SET(target_src_files 
@@ -25,6 +24,13 @@ add_library(engine::board ALIAS board)
 target_compile_features(board
     PRIVATE
         cxx_variable_templates
+)
+
+set_target_properties(board 
+    PROPERTIES
+        CXX_STANDARD 17
+        CXX_EXTENSIONS OFF
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
 
 # Set library headers; public headers are visible to those who
