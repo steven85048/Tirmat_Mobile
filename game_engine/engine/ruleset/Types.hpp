@@ -20,16 +20,16 @@ enum class LanguageDirection_t {
     WEST
 };
 
-struct DFAPassResponse_t {
-    DFAResponseType_t ResponseType = DFAResponseType_t::UNKNOWN;
-    std::vector< engine::board::BoardCellState_t > GeneratingPoints;
-};
-
 enum class DFAResponseType_t {
     NOMATCH,
     GENERATING,
     LEVELCOMPLETION,
     UNKNOWN
+};
+
+struct DFAPassResponse_t {
+    DFAResponseType_t ResponseType = DFAResponseType_t::UNKNOWN;
+    std::vector< engine::board::BoardCellState_t > GeneratingPoints;
 };
 
 struct LanguageInputCharacter_t {

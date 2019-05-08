@@ -1,2 +1,12 @@
 .idea/
 *.exe
+
+# Ignore all build directories EXCEPT for the CMakeLists.txt
+game_engine/engine/build/*
+!game_engine/engine/build/CMakeLists.txt
+
+game_engine/engine/board/build/*
+!game_engine/engine/board/build/CMakeLists.txt
+
+game_engine/build/*
+!game_engine/build/CMakeLists.txt

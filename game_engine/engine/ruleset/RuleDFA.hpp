@@ -1,7 +1,7 @@
 #include <map>
 #include <memory>
 
-#include "engine/board/Types.hpp";
+#include "engine/board/Types.hpp"
 #include "engine/ruleset/Types.hpp"
 
 namespace engine

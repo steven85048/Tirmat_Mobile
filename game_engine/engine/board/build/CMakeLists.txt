@@ -8,13 +8,6 @@ SET(target_src_files
         "../GameBoard.cpp"
 )
 
-SET(target_header_files
-        "../GameBoard.hpp"
-        "../GameBoardInteractorIntf.hpp"
-        "../GameBoardIntf.hpp"
-        "../Types.hpp"
-)
-
 # Define our library
 project(lib_board VERSION 1.0 LANGUAGES CXX)
 add_library(board SHARED ${target_src_files})

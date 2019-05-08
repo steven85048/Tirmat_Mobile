@@ -53,6 +53,7 @@
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
+                "C:/MinGW/include",
                 "${workspaceFolder}/game_engine"
             ],
             "defines": [
@@ -69,6 +70,7 @@
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
+                    "C:/MinGW/include",
                     "${workspaceFolder}/game_engine"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
@@ -78,5 +80,5 @@
             "cppStandard": "c++17"
         }
     ],
-    "version": 4
+    "version": 3
 }
