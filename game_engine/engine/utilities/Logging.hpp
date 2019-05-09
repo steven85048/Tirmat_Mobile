@@ -32,6 +32,23 @@ struct EnumStrings_t {
 
         return "UNKNOWN";
     }
+
+    static std::string MoveResultToString( engine::board::MoveResult_t theResult ) {
+        switch( theResult ) {
+            case engine::board::MoveResult_t::LOCKED:
+                return "LOCKED";
+            case engine::board::MoveResult_t::OUTOFBOUNDS:
+                return "OUTOFBOUNDS";
+            case engine::board::MoveResult_t::RESOURCEUNSET:
+                return "RESOURCEUNSET";
+            case engine::board::MoveResult_t::SUCCESS:
+                return "SUCCESS";
+            case engine::board::MoveResult_t::UNKNOWNMOVE:
+                return "UNKNOWN";
+        }
+
+        return "UNKNOWN";
+    }
 };
 
 } // ENDOF utilities

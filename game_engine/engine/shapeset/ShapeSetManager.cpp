@@ -1,9 +1,11 @@
 #include <unordered_set>
+#include <iostream>
 
 #include "engine/shapeset/ShapeSetManager.hpp"
 #include "engine/board/GameBoardIntf.hpp"
 #include "engine/board/Types.hpp"
 #include "engine/ruleset/Types.hpp"
+#include "engine/utilities/Logging.hpp"
 
 engine::shapeset::ShapeSetManager_t::ShapeSetManager_t( std::shared_ptr< engine::board::GameBoardIntf_t > aGameBoard )
 :
@@ -11,13 +13,16 @@ mGameBoard( std::move( aGameBoard ) ),
 mLocationToPointSetMap()
 {}
 
-void engine::shapeset::ShapeSetManager_t::ExecuteMoves( const std::vector< engine::board::GameBoardMove_t > aMoves ) {
+void engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) {
+    std::cout << "Executing Moves" << std::endl;
+
     if( mGameBoard ) {
         auto theMoveResults = mGameBoard->RunMoves( aMoves );
         
         // If there was a problem executing, we just leave for now; may want more robust handling later
         for( auto& theMoveResult : theMoveResults ) {
             if( theMoveResult != engine::board::MoveResult_t::SUCCESS ) {
+                std::cout << "Board execution failure: " << engine::utilities::EnumStrings_t::MoveResultToString( theMoveResult ) << std::endl;
                 return;
             }
         }
@@ -40,6 +45,8 @@ void engine::shapeset::ShapeSetManager_t::ExecuteMoves( const std::vector< engin
 }
 
 void engine::shapeset::ShapeSetManager_t::AddResource( int xPos, int yPos ) {
+
+    std::cout << "Adding Resource to shapeset" << std::endl;
 
     auto concatSet = GetNeighborSets( xPos, yPos );
 
