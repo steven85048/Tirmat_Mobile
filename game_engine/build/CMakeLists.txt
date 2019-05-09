@@ -12,7 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 project(game_engine)
 
 # Expose the libraries recursively
-add_subdirectory("../engine/build")
+add_subdirectory("../engine/build" lib)
 
 add_executable(game_engine "../engine/shapeset/ShapeSetTest.cpp")
 
