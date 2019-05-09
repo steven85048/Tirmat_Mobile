@@ -45,32 +45,29 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}",
                 "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/",
                 "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/atlmfc/include/",
-                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.10240.0/ucrt",
-                "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.10240.0/ucrt/x64",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
                 "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
-                "C:/MinGW/include",
+                "C:/MinGW/include/c++/8.2.0",
                 "${workspaceFolder}/game_engine"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "_HAS_CXX17"
             ],
             "intelliSenseMode": "msvc-x64",
             "browse": {
                 "path": [
-                    "${workspaceFolder}",
                     "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
                     "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/atlmfc/include/*",
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/um",
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/shared",
                     "C:/Program Files (x86)/Windows Kits/8.1/Include/winrt",
-                    "C:/MinGW/include",
+                    "C:/MinGW/include/c++/8.2.0",
                     "${workspaceFolder}/game_engine"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
