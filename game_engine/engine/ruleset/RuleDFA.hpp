@@ -44,7 +44,7 @@ engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< engine::b
 private: // DATA
 // --------------------------------------------------------
 
-std::unique_ptr< engine::ruleset::DFANode_t > mDFAStartNode;
+std::shared_ptr< engine::ruleset::DFANode_t > mDFAStartNode;
 
 };
 

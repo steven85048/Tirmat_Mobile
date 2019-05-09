@@ -22,7 +22,7 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
             return theResponse;
         }
 
-        theCurrentState = *theCurrentState.Transition[inputCharacterPair];
+        theCurrentState = *(theCurrentState.Transition[inputCharacterPair]);
     }
 
     if( !theCurrentState.IsAcceptingNode ) {
@@ -50,11 +50,11 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
 
         // Similar to Trie! We continue the tree traversal if the transition exists, and create a new node if it doesn't
         if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
-            auto theNewNode = std::make_unique< engine::ruleset::DFANode_t >();
+            auto theNewNode = std::make_shared< engine::ruleset::DFANode_t >();
             theCurrentState.Transition[inputCharacterPair] = std::move( theNewNode );
         }
 
-        theCurrentState = *theCurrentState.Transition[inputCharacterPair];
+        theCurrentState = *( theCurrentState.Transition[inputCharacterPair] );
     }
 
     if( theCurrentState.IsAcceptingNode ) {

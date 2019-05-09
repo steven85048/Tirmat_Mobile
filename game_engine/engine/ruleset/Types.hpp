@@ -46,7 +46,7 @@ struct PointBounds_t {
 struct DFANode_t {
     bool IsLevelCompletionNode = false;
     bool IsAcceptingNode = false;
-    std::map< std::pair< LanguageDirection_t, engine::board::ResourceType_t >, std::unique_ptr< DFANode_t > > Transition;
+    std::map< std::pair< LanguageDirection_t, engine::board::ResourceType_t >, std::shared_ptr< DFANode_t > > Transition;
     std::vector< engine::board::BoardCellState_t > Generating;
 };
 

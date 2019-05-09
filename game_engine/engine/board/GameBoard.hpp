@@ -17,8 +17,9 @@ namespace board
 // Note that this class does not do the resource checking; that should be done before
 // each resource call
 // --------------------------------------------------------
-class GameBoard_t : public GameBoardIntf_t {
+class GameBoard_t : public GameBoardIntf_t 
 // --------------------------------------------------------
+{
 
 // --------------------------------------------------------
 public: // TYPES

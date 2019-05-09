@@ -51,6 +51,11 @@ struct BoardCellState_t {
 // Note that Resource MUST be set if you are adding a resource!
 struct GameBoardMove_t {
 
+    MoveType_t MoveType;
+    int MoveIndexX;
+    int MoveIndexY;
+    std::optional< engine::board::ResourceType_t > Resource = std::nullopt;
+
     GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )
     :
     MoveType( aMoveType ),
@@ -58,11 +63,6 @@ struct GameBoardMove_t {
     MoveIndexY( aMoveIndexY )
     {
     }
-
-    MoveType_t MoveType;
-    int MoveIndexX;
-    int MoveIndexY;
-    std::optional< engine::board::ResourceType_t > Resource = std::nullopt;
 };
 
 } // ENDOF board

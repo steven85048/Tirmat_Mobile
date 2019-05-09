@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "engine/board/GameBoard.hpp"
 #include "engine/board/Types.hpp"
 
 namespace engine
