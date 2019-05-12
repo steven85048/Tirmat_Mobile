@@ -22,11 +22,27 @@ int main()
     engine::board::GameBoardMove_t move3( engine::board::MoveType_t::ADDRESOURCE, 2, 0 );
     move3.Resource = engine::board::ResourceType_t::L3;
 
+    engine::board::GameBoardMove_t move4( engine::board::MoveType_t::ADDRESOURCE, 0, 2 );
+    move4.Resource = engine::board::ResourceType_t::L1;
+    
+    engine::board::GameBoardMove_t move5( engine::board::MoveType_t::ADDRESOURCE, 1, 2 );
+    move5.Resource = engine::board::ResourceType_t::L2;
+
+    engine::board::GameBoardMove_t move6( engine::board::MoveType_t::ADDRESOURCE, 2, 2 );
+    move6.Resource = engine::board::ResourceType_t::L3;
+
+    engine::board::GameBoardMove_t move7( engine::board::MoveType_t::ADDRESOURCE, 2, 1 );
+    move7.Resource = engine::board::ResourceType_t::L6;
+
     std::vector< engine::board::GameBoardMove_t > moveSet;
 
     moveSet.push_back(move1);
     moveSet.push_back(move2);
     moveSet.push_back(move3);
+    moveSet.push_back(move4);
+    moveSet.push_back(move5);
+    moveSet.push_back(move6);
+    moveSet.push_back(move7);
 
     theShapeSetManager->ExecuteMoves( moveSet );
     theBoard->PrintBoard();

@@ -17,14 +17,10 @@ void engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::boa
     std::cout << "Executing Moves" << std::endl;
 
     if( mGameBoard ) {
-        auto theMoveResults = mGameBoard->RunMoves( aMoves );
+        auto theMovesValid = mGameBoard->RunMoves( aMoves );
         
-        // If there was a problem executing, we just leave for now; may want more robust handling later
-        for( auto& theMoveResult : theMoveResults ) {
-            if( theMoveResult != engine::board::MoveResult_t::SUCCESS ) {
-                std::cout << "Board execution failure: " << engine::utilities::EnumStrings_t::MoveResultToString( theMoveResult ) << std::endl;
-                return;
-            }
+        if( !theMovesValid ) {
+            return;
         }
 
         for( auto& theMove : aMoves ) {
@@ -39,8 +35,6 @@ void engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::boa
                 }
             }
         }
-
-        mGameBoard->CommitStagedBoard();
     }
 }
 
@@ -51,7 +45,9 @@ void engine::shapeset::ShapeSetManager_t::AddResource( int xPos, int yPos ) {
     auto concatSet = GetNeighborSets( xPos, yPos );
 
     // Also insert our new point; NOTE that the staged board should be updated with the correct color at this point, so we just get it from there
-    concatSet->push_back( mGameBoard->GetCellStateStaged( xPos, yPos ) );
+    concatSet->push_back( mGameBoard->GetCellState( xPos, yPos ) );
+
+    std::cout << "Elements in concatSet: " << concatSet->size() << std::endl;
 
     // Update the map so all points now reference this new set
     for( auto& thePoint : *concatSet ) {
