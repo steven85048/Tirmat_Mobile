@@ -43,8 +43,10 @@ struct EnumStrings_t {
                 return "RESOURCEUNSET";
             case engine::board::MoveResult_t::SUCCESS:
                 return "SUCCESS";
-            case engine::board::MoveResult_t::UNKNOWNMOVE:
-                return "UNKNOWN";
+            case engine::board::MoveResult_t::DELETEFROMEMPTY:
+                return "DELETEFROMEMPTY";
+            case engine::board::MoveResult_t::MOVEUNCHECKED:
+                return "MOVEUNCHECKED";
         }
 
         return "UNKNOWN";

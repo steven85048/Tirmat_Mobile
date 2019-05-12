@@ -46,8 +46,10 @@ bool engine::board::GameBoard_t::RunMoves( std::vector< engine::board::GameBoard
         auto theMoveResult = VerifyMove( theMove );
         theMove.MoveResult = theMoveResult;
 
+
         // We just don't run this batch of moves if one or more of them is successful
         if( theMoveResult != engine::board::MoveResult_t::SUCCESS ) {
+            std::cout << "Game Board Move ERROR: " << engine::utilities::EnumStrings_t::MoveResultToString( theMoveResult ) << std::endl;
             return false;
         }
     }
@@ -72,10 +74,6 @@ engine::board::MoveResult_t engine::board::GameBoard_t::VerifyMove( engine::boar
         return engine::board::MoveResult_t::LOCKED;
     }
 
-    if( !aMove.Resource ) {
-        return engine::board::MoveResult_t::RESOURCEUNSET;
-    }
-
     // Add specific checks
     if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
         // To add a tile, the resource in the move must be set
@@ -96,8 +94,10 @@ void engine::board::GameBoard_t::RunMove( engine::board::GameBoardMove_t& aMove 
     switch( aMove.MoveType ) {
         case engine::board::MoveType_t::ADDRESOURCE:
             AddResource( aMove );
+            break;
         case engine::board::MoveType_t::REMOVERESOURCE:
             RemoveResource( aMove );
+            break;
         default:
             throw;
     }
@@ -108,8 +108,8 @@ void engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t& aM
         return;
     }
 
-    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ];
-    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ]->Resource = *aMove.Resource;
+    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ]->Resource;
+    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ]->Resource = *aMove.Resource;
 }
 
 void engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t& aMove ) {
@@ -117,7 +117,7 @@ void engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t&
         return;
     }
     
-    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ];
+    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ]->Resource;
     mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ]->Resource = ResourceType_t::EMPTY;
 }
 
