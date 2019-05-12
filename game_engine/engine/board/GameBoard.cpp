@@ -66,6 +66,9 @@ engine::board::MoveResult_t engine::board::GameBoard_t::VerifyMove( engine::boar
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
 
+    //TODO: Handle edge case where a move is added and deleted in a batch (does nothing)
+    // Pretty low priority; shouldn't happen
+
     if( !IsValidPosition( moveX, moveY ) ){
         return engine::board::MoveResult_t::OUTOFBOUNDS;
     }

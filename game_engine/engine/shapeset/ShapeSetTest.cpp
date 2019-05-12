@@ -34,6 +34,11 @@ int main()
     engine::board::GameBoardMove_t move7( engine::board::MoveType_t::ADDRESOURCE, 2, 1 );
     move7.Resource = engine::board::ResourceType_t::L6;
 
+    engine::board::GameBoardMove_t move9( engine::board::MoveType_t::ADDRESOURCE, 1, 1 );
+    move9.Resource = engine::board::ResourceType_t::L6;
+
+    engine::board::GameBoardMove_t move8( engine::board::MoveType_t::REMOVERESOURCE, 2, 1 );
+
     std::vector< engine::board::GameBoardMove_t > moveSet;
 
     moveSet.push_back(move1);
@@ -43,8 +48,15 @@ int main()
     moveSet.push_back(move5);
     moveSet.push_back(move6);
     moveSet.push_back(move7);
+    moveSet.push_back(move9);
+
+    std::vector< engine::board::GameBoardMove_t > moveSet2;
+    moveSet2.push_back(move8);
 
     theShapeSetManager->ExecuteMoves( moveSet );
+    theBoard->PrintBoard();
+
+    theShapeSetManager->ExecuteMoves( moveSet2 );
     theBoard->PrintBoard();
 
     return 0;
