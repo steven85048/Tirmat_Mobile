@@ -35,11 +35,10 @@ GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY );
 public: // GameBoardIntf_t overrides
 // --------------------------------------------------------
 
-std::vector< MoveResult_t > RunMoves( const std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
-void CommitStagedBoard() override;
+// Runs the set of moves in aMoves; note that aMoves WILL be modified after execution
+bool RunMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
 
 std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const override;
-std::shared_ptr< engine::board::BoardCellState_t > GetCellStateStaged( int xPos, int yPos ) const override;
 
 // For Testing
 void PrintBoard();
@@ -51,8 +50,15 @@ private: // FUNCTIONS
 // Allocates heap memory for the board
 BoardArray2D_t AllocateBoard();
 
-MoveResult_t AddResource( engine::board::GameBoardMove_t aMoves );
-MoveResult_t RemoveResource( engine::board::GameBoardMove_t aMoves );
+// Determine if move is possible according to current board conditions
+engine::board::MoveResult_t VerifyMove( engine::board::GameBoardMove_t& aMove );
+
+// Run the move according to the type; will throw if the movetype is unidentified
+void RunMove( engine::board::GameBoardMove_t& aMove );
+
+// It is important that verify move is used on the move BEFORE these functions are run
+void AddResource( engine::board::GameBoardMove_t& aMove );
+void RemoveResource( engine::board::GameBoardMove_t& aMove );
 
 bool IsValidPosition( int moveX, int moveY ) const;
 
@@ -63,11 +69,7 @@ private: // DATA
     std::size_t mBoardWidth;
     std::size_t mBoardHeight;
 
-    // We want to make sure ONLY this class can make copy to the "real" version of the board
     BoardArray2D_t mBoard;
-    BoardArray2D_t mStagedBoard;
-
-    std::stack< std::vector< engine::board::GameBoardMove_t > > mPreviousMoves;
 };
 
 } //ENDOF board

@@ -10,8 +10,7 @@ engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aB
 :
 mBoardWidth( aBoardSizeX ),
 mBoardHeight( aBoardSizeY ),
-mBoard( AllocateBoard() ),
-mStagedBoard( AllocateBoard() )
+mBoard( AllocateBoard() )
 {
 }
 
@@ -41,39 +40,27 @@ std::shared_ptr< engine::board::BoardCellState_t > engine::board::GameBoard_t::G
     return mBoard[xPos][yPos];
 }
 
-std::shared_ptr< engine::board::BoardCellState_t > engine::board::GameBoard_t::GetCellStateStaged( int xPos, int yPos ) const {    
-    if(!IsValidPosition( xPos, yPos ) ) {
-        return nullptr;
-    }
+bool engine::board::GameBoard_t::RunMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) {        
+    // First, we need to verify if the batch of moves that we have is valid
+    for( auto& theMove : aMoves ) {
+        auto theMoveResult = VerifyMove( theMove );
+        theMove.MoveResult = theMoveResult;
 
-    return mStagedBoard[xPos][yPos];
-}
-
-std::vector< engine::board::MoveResult_t > engine::board::GameBoard_t::RunMoves( const std::vector< engine::board::GameBoardMove_t >& aMoves ) {        
-    std::vector< engine::board::MoveResult_t > moveResults;
-
-    // We stage an instance of the board and make that instance the real one
-    // if everything proceeds successfully; deep copies it
-    mStagedBoard = mBoard;
-
-    for( auto& aMove : aMoves ) {
-        if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
-            moveResults.push_back( AddResource( aMove ) );
-        } else if ( aMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
-            moveResults.push_back( RemoveResource( aMove ) );
-        } else {
-            moveResults.push_back( engine::board::MoveResult_t::UNKNOWNMOVE );
+        // We just don't run this batch of moves if one or more of them is successful
+        if( theMoveResult != engine::board::MoveResult_t::SUCCESS ) {
+            return false;
         }
     }
 
-    return moveResults;
+    // If all of the moves are successful, then run them and execute board changes
+    for( auto& theMove : aMoves ) {
+        RunMove( theMove );
+    }
+
+    return true;
 }
 
-void engine::board::GameBoard_t::CommitStagedBoard() {
-    mBoard = std::move( mStagedBoard );
-}
-
-engine::board::MoveResult_t engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t aMove  ) {
+engine::board::MoveResult_t engine::board::GameBoard_t::VerifyMove( engine::board::GameBoardMove_t& aMove ) {
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
 
@@ -89,24 +76,49 @@ engine::board::MoveResult_t engine::board::GameBoard_t::AddResource( engine::boa
         return engine::board::MoveResult_t::RESOURCEUNSET;
     }
 
-    mStagedBoard[ moveX ][ moveY ]->Resource = *aMove.Resource;
+    // Add specific checks
+    if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
+        // To add a tile, the resource in the move must be set
+        if( !aMove.Resource ) {
+            return engine::board::MoveResult_t::RESOURCEUNSET;
+        }        
+    }
+    else if( aMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
+        if( mBoard[moveX][moveY]->Resource == engine::board::ResourceType_t::EMPTY ) {
+            return engine::board::MoveResult_t::DELETEFROMEMPTY;
+        }
+    }
+
     return engine::board::MoveResult_t::SUCCESS;
 }
 
-engine::board::MoveResult_t engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t aMove ) {
-    auto moveX = aMove.MoveIndexX;
-    auto moveY = aMove.MoveIndexY;
-    
-    if( !IsValidPosition( moveX, moveY ) ){
-        return engine::board::MoveResult_t::OUTOFBOUNDS;
+void engine::board::GameBoard_t::RunMove( engine::board::GameBoardMove_t& aMove ) {
+    switch( aMove.MoveType ) {
+        case engine::board::MoveType_t::ADDRESOURCE:
+            AddResource( aMove );
+        case engine::board::MoveType_t::REMOVERESOURCE:
+            RemoveResource( aMove );
+        default:
+            throw;
+    }
+}
+
+void engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t& aMove  ) {
+    if( aMove.MoveResult != engine::board::MoveResult_t::SUCCESS ) {
+        return;
     }
 
-    if( mBoard[ moveX ][ moveY ]->Locked ) {
-        return engine::board::MoveResult_t::LOCKED;
+    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ];
+    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ]->Resource = *aMove.Resource;
+}
+
+void engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t& aMove ) {
+    if( aMove.MoveResult != engine::board::MoveResult_t::SUCCESS ) {
+        return;
     }
     
-    mStagedBoard[ moveX ][ moveY ]->Resource = ResourceType_t::EMPTY;
-    return engine::board::MoveResult_t::SUCCESS;
+    aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ];
+    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ]->Resource = ResourceType_t::EMPTY;
 }
 
 bool engine::board::GameBoard_t::IsValidPosition( int moveX, int moveY ) const {

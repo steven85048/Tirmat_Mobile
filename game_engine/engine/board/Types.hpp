@@ -27,9 +27,10 @@ enum class ResourceType_t {
 enum class MoveResult_t {
     SUCCESS,
     OUTOFBOUNDS,
-    UNKNOWNMOVE,
     LOCKED,
-    RESOURCEUNSET
+    RESOURCEUNSET,
+    DELETEFROMEMPTY,
+    MOVEUNCHECKED
 };
 
 struct PointLocation_t {
@@ -48,12 +49,17 @@ struct BoardCellState_t {
     }
 };
 
-// Note that Resource MUST be set if you are adding a resource!
+// 
 struct GameBoardMove_t {
 
     MoveType_t MoveType;
+    MoveResult_t MoveResult = MoveResult_t::MOVEUNCHECKED;
+
     int MoveIndexX;
     int MoveIndexY;
+    
+    // Previous resource is used to extract the equivalent Undo of this move
+    std::optional< engine::board::ResourceType_t > PreviousResource = std::nullopt; 
     std::optional< engine::board::ResourceType_t > Resource = std::nullopt;
 
     GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )
