@@ -1,5 +1,6 @@
 #include <map>
 #include <memory>
+#include <unordered_set>
 
 #include "engine/board/Types.hpp"
 #include "engine/ruleset/Types.hpp"
@@ -22,8 +23,13 @@ RuleDFA_t();
 // This is important for the generating points to work correctly
 void AddRuleToDFA( const engine::ruleset::Rule_t& aRule );
 
-// Passes the input points through the DFA and outputs whether or not the shape matches successfully
-engine::ruleset::DFAPassResponse_t PassShapeThroughDFA( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
+// Runs the point sets through the DFA again, and updates the game state variables
+void PointSetsUpdated( const std::unordered_set< engine::shapeset::ShapeSetManager_t::PointSet_t >& aPointSets );
+
+// Getter for the generating points
+const std::shared_ptr< std::unordered_set< engine::board::BoardCellState_t > >& GetGeneratingLocations() {
+    return mGeneratingLocations;
+}
 
 // Reset the DFA state
 void Reset();
@@ -32,12 +38,15 @@ void Reset();
 private: // FUNCTIONS
 // --------------------------------------------------------
 
+// Passes the input points through the DFA and outputs whether or not the shape matches successfully
+engine::ruleset::DFAPassResponse_t PassShapeThroughDFA( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints );
+
 // Generate the input string from the points;
 // It traverses the point space in a zig-zag format
-std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
-
+std::vector< engine::ruleset::LanguageInputCharacter_t > ConvertPointsToLanguage( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints,
+                                                                                  const engine::ruleset::PointBounds_t& aPointBounds );
 // Obtains the bounds of a set of points; used to create the input string
-engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< engine::board::BoardCellState_t >& aRulePoints );
+engine::ruleset::PointBounds_t GetBoundsFromPoints( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints );
 
 
 // --------------------------------------------------------
@@ -45,6 +54,7 @@ private: // DATA
 // --------------------------------------------------------
 
 std::shared_ptr< engine::ruleset::DFANode_t > mDFAStartNode;
+std::shared_ptr< std::unordered_set< engine::board::BoardCellState_t > > mGeneratingLocations;
 
 };
 

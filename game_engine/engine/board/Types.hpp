@@ -1,6 +1,8 @@
 #pragma once
 
+#include <vector>
 #include <optional>
+#include <unordered_map>
 
 namespace engine
 {
@@ -49,7 +51,14 @@ struct BoardCellState_t {
     }
 };
 
-// 
+struct GameBoardMoveBatch_t {
+    std::vector< GameBoardMove_t > Moves;
+    std::unordered_map< ResourceType_t, int > ResourceUsage;
+    bool IsGenerating;
+
+    // TODO: function that obtains the necessary resources for batch
+};
+
 struct GameBoardMove_t {
 
     MoveType_t MoveType;

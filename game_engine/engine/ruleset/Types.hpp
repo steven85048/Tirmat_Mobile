@@ -11,8 +11,6 @@ namespace engine
 namespace ruleset
 {
 
-// Technically, only use EAST and SOUTH but we can get more
-// lines in Github with 4
 enum class LanguageDirection_t {
     NORTH,
     EAST,
@@ -29,7 +27,10 @@ enum class DFAResponseType_t {
 
 struct DFAPassResponse_t {
     DFAResponseType_t ResponseType = DFAResponseType_t::UNKNOWN;
-    std::vector< engine::board::BoardCellState_t > GeneratingPoints;
+
+    // Generating points are relative to the LCornerX/Y
+    std::vector< std::shared_ptr< engine::board::BoardCellState_t > > GeneratingPoints;
+    engine::board::PointLocation_t LeftTopCorner;
 };
 
 struct LanguageInputCharacter_t {
@@ -47,13 +48,13 @@ struct DFANode_t {
     bool IsLevelCompletionNode = false;
     bool IsAcceptingNode = false;
     std::map< std::pair< LanguageDirection_t, engine::board::ResourceType_t >, std::shared_ptr< DFANode_t > > Transition;
-    std::vector< engine::board::BoardCellState_t > Generating;
+    std::vector< std::shared_ptr< engine::board::BoardCellState_t > > Generating;
 };
 
 struct Rule_t{
     bool IsLevelCompletionRule = false;
-    std::vector< engine::board::BoardCellState_t > RulePoints;
-    std::vector< engine::board::BoardCellState_t > GeneratePoints;
+    std::vector< std::shared_ptr< engine::board::BoardCellState_t > > RulePoints;
+    std::vector< std::shared_ptr< engine::board::BoardCellState_t > > GeneratePoints;
 };
 
 } // ENDOF ruleset

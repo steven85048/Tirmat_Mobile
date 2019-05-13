@@ -2,6 +2,7 @@
 #include <map>
 
 #include "engine/ruleset/RuleDFA.hpp"
+#include "engine/shapeset/ShapeSetManager.hpp"
 
 engine::ruleset::RuleDFA_t::RuleDFA_t()
 :
@@ -9,12 +10,47 @@ mDFAStartNode( std::make_unique< engine::ruleset::DFANode_t >() )
 {  
 }
 
-engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< engine::board::BoardCellState_t >& aShapePoints ) {
+void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< engine::shapeset::ShapeSetManager_t::PointSet_t >& aPointSets ) {
+    
+    mGeneratingLocations->clear();
+    
+    for( auto& thePointSet : aPointSets ) {
+        auto thePassResponse = PassShapeThroughDFA( *thePointSet );
+        
+        if( thePassResponse.ResponseType == engine::ruleset::DFAResponseType_t::LEVELCOMPLETION ) {
+            // TODO: set some shared level completion variable
+        } else if( thePassResponse.ResponseType == engine::ruleset::DFAResponseType_t::GENERATING ) {
+
+            auto theShapeCorner = thePassResponse.LeftTopCorner;
+            auto theShapeGeneratingPoints = thePassResponse.GeneratingPoints;
+
+            // For each point, we create the new point with the absolute location
+            // Corner + generating point(x,y)
+            for( auto& thePoint : theShapeGeneratingPoints ) {
+                engine::board::BoardCellState_t theGeneratingState( theShapeCorner.xPos + thePoint->Location.xPos, theShapeCorner.yPos + thePoint->Location.yPos );
+                theGeneratingState.Resource = thePoint->Resource;
+                theGeneratingState.Locked = thePoint->Locked;
+
+                // TODO: Assumes there are no duplicate generating locations for now; we may want to add
+                // the values in the case of duplicates
+
+                mGeneratingLocations->insert( theGeneratingState );
+            }
+        }
+    }
+}
+
+engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aShapePoints ) {
     auto& theCurrentState = *mDFAStartNode;
 
     engine::ruleset::DFAPassResponse_t theResponse{};
 
-    auto theInputString = ConvertPointsToLanguage( aShapePoints );
+    auto thePointBounds = GetBoundsFromPoints( aShapePoints );
+    auto theInputString = ConvertPointsToLanguage( aShapePoints, thePointBounds );
+
+    // Used to get the absolute generating location
+    theResponse.LeftTopCorner = thePointBounds.LeftTopCorner;
+
     for( auto& theInputCharacter : theInputString ) {
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
         if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
@@ -43,7 +79,9 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
 void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aRule ) {
     auto& theCurrentState = *mDFAStartNode;
 
-    auto theInputString = ConvertPointsToLanguage( aRule.RulePoints );
+    auto thePointBounds = GetBoundsFromPoints( aRule.RulePoints );
+    auto theInputString = ConvertPointsToLanguage( aRule.RulePoints, thePointBounds );
+
     for( auto& theInputCharacter : theInputString ) {
         // Using structs as keys are annoying, so we just use a pair
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
@@ -66,24 +104,23 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
     theCurrentState.Generating = aRule.GeneratePoints;
 }
 
-std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< engine::board::BoardCellState_t >& aRulePoints ) {
+std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints, 
+                                                                                                              const engine::ruleset::PointBounds_t& aPointBounds ) {
     std::vector< engine::ruleset::LanguageInputCharacter_t > inputString;
     
     if( aRulePoints.size() == 0 ) {
         return inputString;
     }
     
-    engine::ruleset::PointBounds_t pointBounds = GetBoundsFromPoints( aRulePoints );
-
     std::map< std::pair< int, int >, engine::board::ResourceType_t > pointLocationToResourceMap {};
     for( auto& point : aRulePoints ) {
-        pointLocationToResourceMap[{ point.Location.xPos, point.Location.yPos }] = point.Resource;
+        pointLocationToResourceMap[{ point->Location.xPos, point->Location.yPos }] = point->Resource;
     }
 
-    for( int i = pointBounds.LeftTopCorner.xPos; i < pointBounds.LeftTopCorner.xPos + pointBounds.recWidth; i++ ) {
+    for( int i = aPointBounds.LeftTopCorner.xPos; i < aPointBounds.LeftTopCorner.xPos + aPointBounds.recWidth; i++ ) {
         auto direction = engine::ruleset::LanguageDirection_t::EAST;
 
-        for( int j = pointBounds.LeftTopCorner.yPos; j < pointBounds.LeftTopCorner.yPos + pointBounds.recHeight; j++) {
+        for( int j = aPointBounds.LeftTopCorner.yPos; j < aPointBounds.LeftTopCorner.yPos + aPointBounds.recHeight; j++) {
             engine::ruleset::LanguageInputCharacter_t newCharacter{};
             newCharacter.Direction = direction;
 
@@ -112,7 +149,7 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
     return inputString;
 }
 
-engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< engine::board::BoardCellState_t >& aRulePoints ) {
+engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints ) {
 
     engine::ruleset::PointBounds_t theBounds {};
 
@@ -126,20 +163,20 @@ engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( 
     // First, obtain the range of the points
     // note lower means higher in the board in the user's perspective
     for( auto& point : aRulePoints) {
-        if( point.Location.xPos < xLowCorner || !hasSetCorner ) {
-            xLowCorner = point.Location.xPos;
+        if( point->Location.xPos < xLowCorner || !hasSetCorner ) {
+            xLowCorner = point->Location.xPos;
         }
 
-        if( point.Location.yPos < yLowCorner || !hasSetCorner ) {
-            yLowCorner = point.Location.yPos;
+        if( point->Location.yPos < yLowCorner || !hasSetCorner ) {
+            yLowCorner = point->Location.yPos;
         }
 
-        if( point.Location.xPos > xHighCorner || !hasSetCorner ) {
-            xHighCorner = point.Location.xPos;
+        if( point->Location.xPos > xHighCorner || !hasSetCorner ) {
+            xHighCorner = point->Location.xPos;
         }
 
-        if( point.Location.yPos > yHighCorner || !hasSetCorner ) {
-            yHighCorner = point.Location.xPos;
+        if( point->Location.yPos > yHighCorner || !hasSetCorner ) {
+            yHighCorner = point->Location.xPos;
         }
     }
 
