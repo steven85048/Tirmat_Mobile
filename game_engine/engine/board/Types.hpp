@@ -71,11 +71,12 @@ struct GameBoardMove_t {
     std::optional< engine::board::ResourceType_t > PreviousResource = std::nullopt; 
     std::optional< engine::board::ResourceType_t > Resource = std::nullopt;
 
-    GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY )
+    GameBoardMove_t( MoveType_t aMoveType, int aMoveIndexX, int aMoveIndexY, std::optional< engine::board::ResourceType_t > aResource = std::nullopt )
     :
     MoveType( aMoveType ),
     MoveIndexX( aMoveIndexX ),
-    MoveIndexY( aMoveIndexY )
+    MoveIndexY( aMoveIndexY ),
+    Resource( aResource )
     {
     }
 };

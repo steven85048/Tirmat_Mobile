@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "engine/board/UserResources.hpp"
 
 engine::board::UserResources_t::UserResources_t()
@@ -40,6 +42,7 @@ bool engine::board::UserResources_t::ValidateResources( std::unordered_map< engi
 
         // If the amount of resource we have is less than what we need
         auto theHaveResourceCount = (*mResources)[theUseResourceType];
+
         if( theHaveResourceCount + theUseResourceCount < 0 ) {
             return false;
         }

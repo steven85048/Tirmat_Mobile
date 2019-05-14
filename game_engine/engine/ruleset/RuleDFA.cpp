@@ -1,3 +1,4 @@
+#include <iostream>
 #include <memory>
 #include <map>
 
@@ -6,18 +7,22 @@
 
 engine::ruleset::RuleDFA_t::RuleDFA_t()
 :
-mDFAStartNode( std::make_unique< engine::ruleset::DFANode_t >() )
+mDFAStartNode( std::make_shared< engine::ruleset::DFANode_t >() ),
+mGeneratingLocations( std::make_shared< std::vector< engine::board::BoardCellState_t > >() )
 {  
 }
 
 void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< engine::shapeset::ShapeSetManager_t::PointSet_t >& aPointSets ) {
     
+    std::cout << "RuleDFA_T::PointSetsUpdated: " << aPointSets.size() << std::endl;
+
     mGeneratingLocations->clear();
     
     for( auto& thePointSet : aPointSets ) {
         auto thePassResponse = PassShapeThroughDFA( *thePointSet );
         
         if( thePassResponse.ResponseType == engine::ruleset::DFAResponseType_t::LEVELCOMPLETION ) {
+            std::cout << "Reached Level Completion Node" << std::endl;
             // TODO: set some shared level completion variable
         } else if( thePassResponse.ResponseType == engine::ruleset::DFAResponseType_t::GENERATING ) {
 
@@ -41,7 +46,9 @@ void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< eng
 }
 
 engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aShapePoints ) {
-    auto& theCurrentState = *mDFAStartNode;
+    std::cout << "RuleDFA_T::PassShapeThroughDFA" << std::endl;
+    
+    auto theCurrentState = mDFAStartNode;
 
     engine::ruleset::DFAPassResponse_t theResponse{};
 
@@ -52,24 +59,26 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
     theResponse.LeftTopCorner = thePointBounds.LeftTopCorner;
 
     for( auto& theInputCharacter : theInputString ) {
+        std::cout << "Transitioning pass: " << theCurrentState->Transition.size() << std::endl;
+
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
-        if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
+        if( theCurrentState->Transition.find( inputCharacterPair ) == theCurrentState->Transition.end() ) {
             theResponse.ResponseType = engine::ruleset::DFAResponseType_t::NOMATCH;
             return theResponse;
         }
 
-        theCurrentState = *(theCurrentState.Transition[inputCharacterPair]);
+        theCurrentState = theCurrentState->Transition[inputCharacterPair];
     }
 
-    if( !theCurrentState.IsAcceptingNode ) {
+    if( !theCurrentState->IsAcceptingNode ) {
         theResponse.ResponseType = engine::ruleset::DFAResponseType_t::NOMATCH;
         return theResponse;
     }
 
-    theResponse.GeneratingPoints = theCurrentState.Generating;
-    if( theCurrentState.IsLevelCompletionNode ) {
+    theResponse.GeneratingPoints = theCurrentState->Generating;
+    if( theCurrentState->IsLevelCompletionNode ) {
         theResponse.ResponseType = engine::ruleset::DFAResponseType_t::LEVELCOMPLETION;
-    } else if ( theCurrentState.IsAcceptingNode ) {
+    } else if ( theCurrentState->IsAcceptingNode ) {
         theResponse.ResponseType = engine::ruleset::DFAResponseType_t::GENERATING;
     }
 
@@ -77,35 +86,42 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
 }
 
 void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aRule ) {
-    auto& theCurrentState = *mDFAStartNode;
+    auto theCurrentState = mDFAStartNode;
 
     auto thePointBounds = GetBoundsFromPoints( aRule.RulePoints );
     auto theInputString = ConvertPointsToLanguage( aRule.RulePoints, thePointBounds );
 
     for( auto& theInputCharacter : theInputString ) {
+        std::cout << "Transitioning add rule" << std::endl;
+
         // Using structs as keys are annoying, so we just use a pair
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
 
         // Similar to Trie! We continue the tree traversal if the transition exists, and create a new node if it doesn't
-        if( theCurrentState.Transition.find( inputCharacterPair ) == theCurrentState.Transition.end() ) {
+        if( theCurrentState->Transition.find( inputCharacterPair ) == theCurrentState->Transition.end() ) {
             auto theNewNode = std::make_shared< engine::ruleset::DFANode_t >();
-            theCurrentState.Transition[inputCharacterPair] = std::move( theNewNode );
+            theCurrentState->Transition[inputCharacterPair] = std::move( theNewNode );
         }
 
-        theCurrentState = *( theCurrentState.Transition[inputCharacterPair] );
+        theCurrentState = theCurrentState->Transition[inputCharacterPair];
     }
 
-    if( theCurrentState.IsAcceptingNode ) {
-        // ERROR! There is a duplicate rule in the set.
+    if( theCurrentState->IsAcceptingNode ) {
+        // Duplicate rule
     }
 
-    theCurrentState.IsAcceptingNode = true;
-    theCurrentState.IsLevelCompletionNode = aRule.IsLevelCompletionRule;
-    theCurrentState.Generating = aRule.GeneratePoints;
+    theCurrentState->IsAcceptingNode = true;
+    theCurrentState->IsLevelCompletionNode = aRule.IsLevelCompletionRule;
+    theCurrentState->Generating = aRule.GeneratePoints;
 }
 
 std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints, 
                                                                                                               const engine::ruleset::PointBounds_t& aPointBounds ) {
+    std::cout << "RuleDFA_t::ConvertPointsToLanguage" << std::endl;
+    
+    std::cout << "Point bounds width: " << aPointBounds.recWidth << " height: " << aPointBounds.recHeight << std::endl;
+    std::cout << "Point bounds xCorn: " << aPointBounds.LeftTopCorner.xPos << " yCorn: " << aPointBounds.LeftTopCorner.yPos << std::endl;
+ 
     std::vector< engine::ruleset::LanguageInputCharacter_t > inputString;
     
     if( aRulePoints.size() == 0 ) {
@@ -117,10 +133,11 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
         pointLocationToResourceMap[{ point->Location.xPos, point->Location.yPos }] = point->Resource;
     }
 
-    for( int i = aPointBounds.LeftTopCorner.xPos; i < aPointBounds.LeftTopCorner.xPos + aPointBounds.recWidth; i++ ) {
+    for( int i = aPointBounds.LeftTopCorner.xPos; i <= aPointBounds.LeftTopCorner.xPos + aPointBounds.recWidth; i++ ) {
         auto direction = engine::ruleset::LanguageDirection_t::EAST;
 
-        for( int j = aPointBounds.LeftTopCorner.yPos; j < aPointBounds.LeftTopCorner.yPos + aPointBounds.recHeight; j++) {
+        for( int j = aPointBounds.LeftTopCorner.yPos; j <= aPointBounds.LeftTopCorner.yPos + aPointBounds.recHeight; j++) {
+
             engine::ruleset::LanguageInputCharacter_t newCharacter{};
             newCharacter.Direction = direction;
 
@@ -131,10 +148,10 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
             // This solves the issue of L shapes!
             if( pointLocationToResourceMap.find({i, j}) != pointLocationToResourceMap.end() ) {
                 newCharacter.Resource = pointLocationToResourceMap[{i, j}];
-            } else if ( ( pointLocationToResourceMap.find({i, j}) != pointLocationToResourceMap.end() ) ||
-                        ( pointLocationToResourceMap.find({i, j}) != pointLocationToResourceMap.end() ) ||
-                        ( pointLocationToResourceMap.find({i, j}) != pointLocationToResourceMap.end() ) ||
-                        ( pointLocationToResourceMap.find({i, j}) != pointLocationToResourceMap.end() ) ) {
+            } else if ( ( pointLocationToResourceMap.find({i+1, j}) != pointLocationToResourceMap.end() ) ||
+                        ( pointLocationToResourceMap.find({i, j+1}) != pointLocationToResourceMap.end() ) ||
+                        ( pointLocationToResourceMap.find({i-1, j}) != pointLocationToResourceMap.end() ) ||
+                        ( pointLocationToResourceMap.find({i, j-1}) != pointLocationToResourceMap.end() ) ) {
                 newCharacter.Resource = engine::board::ResourceType_t::EMPTY;
             } else {
                 newCharacter.Resource = engine::board::ResourceType_t::IGNORE;
@@ -176,8 +193,10 @@ engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( 
         }
 
         if( point->Location.yPos > yHighCorner || !hasSetCorner ) {
-            yHighCorner = point->Location.xPos;
+            yHighCorner = point->Location.yPos;
         }
+
+        hasSetCorner = true;
     }
 
     theBounds.LeftTopCorner = engine::board::PointLocation_t{ xLowCorner, yLowCorner };
