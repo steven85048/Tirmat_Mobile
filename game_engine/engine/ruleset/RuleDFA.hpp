@@ -1,12 +1,16 @@
+#pragma once
+
 #include <map>
 #include <memory>
 #include <unordered_set>
 
 #include "engine/board/Types.hpp"
 #include "engine/ruleset/Types.hpp"
+#include "engine/shapeset/ShapeSetManager.hpp"
 
 namespace engine
 {
+
 namespace ruleset
 {
 
@@ -27,7 +31,7 @@ void AddRuleToDFA( const engine::ruleset::Rule_t& aRule );
 void PointSetsUpdated( const std::unordered_set< engine::shapeset::ShapeSetManager_t::PointSet_t >& aPointSets );
 
 // Getter for the generating points
-const std::shared_ptr< std::unordered_set< engine::board::BoardCellState_t > >& GetGeneratingLocations() {
+const std::shared_ptr< std::vector< engine::board::BoardCellState_t > >& GetGeneratingLocations() {
     return mGeneratingLocations;
 }
 
@@ -54,7 +58,7 @@ private: // DATA
 // --------------------------------------------------------
 
 std::shared_ptr< engine::ruleset::DFANode_t > mDFAStartNode;
-std::shared_ptr< std::unordered_set< engine::board::BoardCellState_t > > mGeneratingLocations;
+std::shared_ptr< std::vector< engine::board::BoardCellState_t > > mGeneratingLocations;
 
 };
 

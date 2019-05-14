@@ -14,9 +14,11 @@ project(game_engine)
 # Expose the libraries recursively
 add_subdirectory("../engine/build" lib)
 
-add_executable(game_engine "../engine/shapeset/ShapeSetTest.cpp")
+# To change the test file, just change the executable file (cpp with main)
+#add_executable(game_engine "../engine/shapeset/ShapeSetTest.cpp")
+add_executable(game_engine "../engine/EngineTest.cpp")
 
-# Link the libraries
+# The rest of the engine is compiled as a library 
 target_link_libraries(game_engine engine)
 
 set_target_properties(game_engine 
@@ -25,6 +27,7 @@ set_target_properties(game_engine
         CXX_EXTENSIONS OFF
 )
 
+# All non-external library includes are relative to the base directory; grouped by namespace
 target_include_directories(game_engine
     PUBLIC
         "../"

@@ -34,7 +34,7 @@ void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< eng
                 // TODO: Assumes there are no duplicate generating locations for now; we may want to add
                 // the values in the case of duplicates
 
-                mGeneratingLocations->insert( theGeneratingState );
+                mGeneratingLocations->push_back( theGeneratingState );
             }
         }
     }

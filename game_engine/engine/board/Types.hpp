@@ -38,6 +38,10 @@ enum class MoveResult_t {
 struct PointLocation_t {
     int xPos;
     int yPos;
+
+    friend bool operator==(const PointLocation_t& aLeftLocation, const PointLocation_t& aRightLocation) {
+        return aLeftLocation.xPos == aRightLocation.xPos && aLeftLocation.yPos == aRightLocation.yPos;
+    }
 };
 
 struct BoardCellState_t {
@@ -49,14 +53,10 @@ struct BoardCellState_t {
         Location.xPos = xPos;
         Location.yPos = yPos;
     }
-};
 
-struct GameBoardMoveBatch_t {
-    std::vector< GameBoardMove_t > Moves;
-    std::unordered_map< ResourceType_t, int > ResourceUsage;
-    bool IsGenerating;
-
-    // TODO: function that obtains the necessary resources for batch
+    friend bool operator==(const BoardCellState_t& aLeftState, const BoardCellState_t& aRightState) {
+        return aLeftState.Location == aRightState.Location && aLeftState.Resource == aRightState.Resource && aLeftState.Locked == aRightState.Locked; 
+    }
 };
 
 struct GameBoardMove_t {
@@ -78,6 +78,14 @@ struct GameBoardMove_t {
     MoveIndexY( aMoveIndexY )
     {
     }
+};
+
+struct GameBoardMoveBatch_t {
+    std::vector< GameBoardMove_t > Moves;
+    std::unordered_map< ResourceType_t, int > ResourceUsage;
+    bool IsGenerating;
+
+    // TODO: function that obtains the necessary resources for batch
 };
 
 } // ENDOF board
