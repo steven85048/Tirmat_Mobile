@@ -18,6 +18,7 @@ enum class MoveType_t {
 enum class ResourceType_t {
     EMPTY,
     IGNORE,
+    REFUND,
     L1,
     L2,
     L3,
@@ -86,7 +87,30 @@ struct GameBoardMoveBatch_t {
     std::unordered_map< ResourceType_t, int > ResourceUsage;
     bool IsGenerating;
 
-    // TODO: function that obtains the necessary resources for batch
+    // Updates the resource usage map with the resource usages specified in Moves
+    void UpdateResourceUsage() {
+        for( auto& theMove : Moves ) {
+            if( theMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
+                if( theMove.Resource ) { 
+                    ResourceUsage[*theMove.Resource] -= 1;
+                }
+            } else if( theMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
+                ResourceUsage[ResourceType_t::REFUND] -=1 ;
+            }
+        }
+    }
+
+    // After the moves are processed, this method reupdates ResourceUsages with the
+    // refunds on removing a resource
+    void ProcessRefunds() {
+        for( auto& theMove : Moves ) {
+            if( theMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
+                if( theMove.PreviousResource ) {
+                    ResourceUsage[*theMove.PreviousResource] +=1;
+                }
+            }
+        }
+    }
 };
 
 } // ENDOF board

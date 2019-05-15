@@ -12,8 +12,6 @@
 #include "engine/move/MoveManager.hpp"
 #include "engine/board/UserResources.hpp"
 
-// Testing suite for shapeset functionality
-
 void engine::initialization::GameBoardFactory_t::InitializeForTesting() {
 
     // Shared state variables
@@ -64,12 +62,6 @@ void engine::initialization::GameBoardFactory_t::InitializeForTesting() {
 
     theMoveBatch.Moves.push_back(move1);
     theMoveBatch.Moves.push_back(move2);
-
-    std::unordered_map< engine::board::ResourceType_t, int > theUseResources;
-    theUseResources[ engine::board::ResourceType_t::L1 ] = 1;
-    theUseResources[ engine::board::ResourceType_t::L2 ] = 1;
-
-    theMoveBatch.ResourceUsage = theUseResources;
 
     theMoveManager->ExecuteMoves( theMoveBatch );
 }

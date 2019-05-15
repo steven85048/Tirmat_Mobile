@@ -4,8 +4,8 @@
 #include "engine/move/MoveManager.hpp"
 
 engine::move::MoveManager_t::MoveManager_t(  std::unique_ptr< engine::ruleset::RuleDFA_t > aRuleDFA, 
-                                       std::unique_ptr< engine::shapeset::ShapeSetManager_t > aShapeSetManager,
-                                       std::unique_ptr< engine::board::UserResources_t > aUserResources )
+                                             std::unique_ptr< engine::shapeset::ShapeSetManager_t > aShapeSetManager,
+                                             std::unique_ptr< engine::board::UserResources_t > aUserResources )
 :
 mRuleDFA( std::move( aRuleDFA ) ),
 mShapeSetManager( std::move( aShapeSetManager ) ),
@@ -28,12 +28,14 @@ void engine::move::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatc
         return;
     }
 
+    aMoveBatch.UpdateResourceUsage();
+
     // Validate we have enough resources for these moves
     if( !mUserResources->ValidateResources( aMoveBatch.ResourceUsage ) ) {
         return;
     }
 
-    std::cout << "Resources Validated! " << std::endl;
+    std::cout << "Resources Validated!" << std::endl;
 
     // If the move is a generating, we need to first initialize our moves
     if( aMoveBatch.IsGenerating ) {
@@ -51,12 +53,16 @@ void engine::move::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatc
         }
     }
 
-    mShapeSetManager->ExecuteMoves( aMoveBatch.Moves );
+    auto theMovesSucceeded = mShapeSetManager->ExecuteMoves( aMoveBatch.Moves );
 
-    std::cout << "MoveManager updating point sets" << std::endl;
-    // Now we update the rule DFA with our updated points
-    auto theUpdatedPointSets = mShapeSetManager->GetPointSets();
-    mRuleDFA->PointSetsUpdated( theUpdatedPointSets );
+    if( theMovesSucceeded ) {
+        // Now we update the rule DFA with our updated points
+        auto theUpdatedPointSets = mShapeSetManager->GetPointSets();
+        mRuleDFA->PointSetsUpdated( theUpdatedPointSets );
+        
+        // We also process possible resource returns here and update our resource usage
+        aMoveBatch.ProcessRefunds();
+        mUserResources->UpdateResources( aMoveBatch.ResourceUsage );
+    }
 
-    mUserResources->UpdateResources( aMoveBatch.ResourceUsage );
 }

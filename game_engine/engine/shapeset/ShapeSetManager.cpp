@@ -13,14 +13,16 @@ mGameBoard( std::move( aGameBoard ) ),
 mLocationToPointSetMap()
 {}
 
-void engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) {
+bool engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) {
     std::cout << "Executing Moves" << std::endl;
+
+    // TODO: Return more advanced error states
 
     if( mGameBoard ) {
         auto theMovesValid = mGameBoard->RunMoves( aMoves );
         
         if( !theMovesValid ) {
-            return;
+            return false;
         }
 
         for( auto& theMove : aMoves ) {
@@ -35,7 +37,11 @@ void engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::boa
                 }
             }
         }
+
+        return true;
     }
+
+    return false;
 }
 
 void engine::shapeset::ShapeSetManager_t::AddResource( int xPos, int yPos ) {

@@ -31,7 +31,7 @@ public: // FUNCTIONS
 
 ShapeSetManager_t( std::shared_ptr< engine::board::GameBoardIntf_t > aGameBoard );
 
-void ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves );
+bool ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves );
 std::unordered_set< PointSet_t >& GetPointSets(){ return mPointSets; }
 
 // --------------------------------------------------------

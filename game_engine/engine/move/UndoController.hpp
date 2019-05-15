@@ -1,26 +1,24 @@
 #pragma once
 
+#include <stack>
+
 namespace engine
 {
 
-namespace initialization
+namespace move
 {
 
-// Initializes the game with a variety of different options
-class GameBoardFactory_t
+// Creates and processes the undoes; returns the set of equivalent
+// undo operations.
+class UndoController_t
 {
-    
 // --------------------------------------------------------
 public: // FUNCTIONS
 // --------------------------------------------------------
 
-// Initializes objects in a testing environment
-void InitializeForTesting();
-
 // --------------------------------------------------------
 private: // FUNCTIONS
 // --------------------------------------------------------
-
 
 // --------------------------------------------------------
 private: // DATA
@@ -28,5 +26,5 @@ private: // DATA
 
 };
 
-} // ENDOF initialization
+} // ENDOF move
 } // ENDOF engine
