@@ -7,12 +7,24 @@ namespace engine
 namespace initialization
 {
 
+// Initializes the game with a variety of different options
 class GameBoardFactory_t
 {
     
-public:
+// --------------------------------------------------------
+public: // FUNCTIONS
+// --------------------------------------------------------
 
-    GameBoardIntf_t InitializeBoardWithFile();
+void InitializeForTesting();
+
+// --------------------------------------------------------
+private: // FUNCTIONS
+// --------------------------------------------------------
+
+
+// --------------------------------------------------------
+private: // DATA
+// --------------------------------------------------------
 
 };
 

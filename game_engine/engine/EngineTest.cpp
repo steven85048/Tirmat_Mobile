@@ -6,7 +6,7 @@
 #include "engine/board/Types.hpp"
 #include "engine/ruleset/RuleDFA.hpp"
 #include "engine/ruleset/Types.hpp"
-#include "engine/MoveManager.hpp"
+#include "engine/move/MoveManager.hpp"
 #include "engine/board/UserResources.hpp"
 
 // Testing suite for shapeset functionality
@@ -44,7 +44,7 @@ int main()
     theUserResources->UpdateResources(theResources);
 
     // Move Manager init
-    auto theMoveManager = std::make_shared< engine::MoveManager_t >( std::move( theRuleDFA ), std::move( theShapeSetManager ), std::move( theUserResources ) );
+    auto theMoveManager = std::make_shared< engine::move::MoveManager_t >( std::move( theRuleDFA ), std::move( theShapeSetManager ), std::move( theUserResources ) );
 
     engine::board::GameBoardMoveBatch_t theMoveBatch;
 

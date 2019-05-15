@@ -21,7 +21,7 @@ class RuleDFA_t
 public: // FUNCTIONS
 // --------------------------------------------------------
 
-RuleDFA_t();
+RuleDFA_t( std::shared_ptr< std::vector< engine::board::BoardCellState_t > > aGeneratingLocations );
 
 // Note that DFA generation rules must have a LeftTop coordinate of (0,0)
 // This is important for the generating points to work correctly

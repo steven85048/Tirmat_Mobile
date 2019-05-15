@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "engine/MoveManager.hpp"
+#include "engine/move/MoveManager.hpp"
 
-engine::MoveManager_t::MoveManager_t(  std::unique_ptr< engine::ruleset::RuleDFA_t > aRuleDFA, 
+engine::move::MoveManager_t::MoveManager_t(  std::unique_ptr< engine::ruleset::RuleDFA_t > aRuleDFA, 
                                        std::unique_ptr< engine::shapeset::ShapeSetManager_t > aShapeSetManager,
                                        std::unique_ptr< engine::board::UserResources_t > aUserResources )
 :
@@ -13,7 +13,7 @@ mUserResources( std::move( aUserResources ) )
 {
 }
 
-void engine::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatch_t& aMoveBatch ) {
+void engine::move::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatch_t& aMoveBatch ) {
     std::cout << "MoveManager::ExecuteMoves" << std::endl;
 
     if( !mUserResources ) {

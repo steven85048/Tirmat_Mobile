@@ -9,11 +9,9 @@ SET(board_src_files
         "../board/UserResources.cpp"
 )
 
-#[[
 SET(initialization_src_files 
         "../initialization/GameBoardFactory.cpp"
 )
-]]
 
 SET(ruleset_src_files 
         "../ruleset/RuleDFA.cpp"
@@ -23,8 +21,12 @@ SET(shapeset_src_files
         "../shapeset/ShapeSetManager.cpp"
 )
 
+SET(state_src_files 
+        "../state/UserStateContainer.cpp"
+)
+
 SET(engine_src_files 
-        "../MoveManager.cpp"
+        "../move/MoveManager.cpp"
 )
 
 # Define our library
@@ -33,6 +35,7 @@ add_library(engine SHARED ${board_src_files}
                           ${initialization_src_files} 
                           ${ruleset_src_files} 
                           ${shapeset_src_files}  
+                          ${state_src_files}
                           ${engine_src_files} )
 
 # Set library compilation features

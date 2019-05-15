@@ -10,6 +10,9 @@
 namespace engine
 {
 
+namespace move
+{
+
 // The brains of each move; tells the respective manageres to perform their operations
 class MoveManager_t
 {
@@ -35,4 +38,6 @@ private: // DATA
     std::unique_ptr< engine::shapeset::ShapeSetManager_t > mShapeSetManager;
     std::unique_ptr< engine::board::UserResources_t > mUserResources;
 };
-}
+
+} // ENDOF move
+} // ENDOF engine

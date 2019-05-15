@@ -5,10 +5,10 @@
 #include "engine/ruleset/RuleDFA.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 
-engine::ruleset::RuleDFA_t::RuleDFA_t()
+engine::ruleset::RuleDFA_t::RuleDFA_t( std::shared_ptr< std::vector< engine::board::BoardCellState_t > > aGeneratingLocations )
 :
 mDFAStartNode( std::make_shared< engine::ruleset::DFANode_t >() ),
-mGeneratingLocations( std::make_shared< std::vector< engine::board::BoardCellState_t > >() )
+mGeneratingLocations( std::move( aGeneratingLocations ) )
 {  
 }
 

@@ -16,7 +16,7 @@ class UserResources_t
 public: // FUNCTIONS
 // --------------------------------------------------------
 
-UserResources_t();
+UserResources_t( std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > aResources );
     
 // Assumes that ValidateResources() is called before this
 void UpdateResources( std::unordered_map< engine::board::ResourceType_t, int >& aResources );
@@ -31,7 +31,8 @@ private: // FUNCTIONS
 private: // DATA
 // --------------------------------------------------------
 
-    std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > mResources;
+std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > mResources;
+
 };
 
 } //END of board

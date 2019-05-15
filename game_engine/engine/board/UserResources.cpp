@@ -2,9 +2,9 @@
 
 #include "engine/board/UserResources.hpp"
 
-engine::board::UserResources_t::UserResources_t()
+engine::board::UserResources_t::UserResources_t( std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > aResources )
 :
-mResources( std::make_shared< std::unordered_map< engine::board::ResourceType_t, int > >() )
+mResources( std::move( aResources ) )
 {
 }
     
