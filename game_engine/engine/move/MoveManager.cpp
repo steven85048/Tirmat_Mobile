@@ -15,8 +15,7 @@ mUndoController( std::make_unique< engine::move::UndoController_t >() )
 }
 
 void engine::move::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatch_t& aMoveBatch ) {
-    std::cout << "MoveManager::ExecuteMoves" << std::endl;
-
+    
     if( !mUserResources ) {
         return;
     }
@@ -33,10 +32,9 @@ void engine::move::MoveManager_t::ExecuteMoves( engine::board::GameBoardMoveBatc
 
     // Validate we have enough resources for these moves
     if( !mUserResources->ValidateResources( aMoveBatch.ResourceUsage ) ) {
+        std::cout << "Insufficient Resources for this move! " << std::endl;
         return;
     }
-
-    std::cout << "Resources Validated!" << std::endl;
 
     // If the move is a generating, we need to first initialize our moves
     if( aMoveBatch.IsGenerating ) {
@@ -76,7 +74,7 @@ void engine::move::MoveManager_t::PopUndoMoves() {
         auto theUndoMoveBatch = mUndoController->PopUndoMove();
 
         // if optional is nullopt, there is no undo to process
-        if( theMoveUndoBatch ) {
+        if( theUndoMoveBatch ) {
             ExecuteMoves( *theUndoMoveBatch );
         }
     }

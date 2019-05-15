@@ -1,3 +1,5 @@
+//#define LOG_SHAPE_SET
+
 #include <unordered_set>
 #include <iostream>
 
@@ -14,8 +16,6 @@ mLocationToPointSetMap()
 {}
 
 bool engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) {
-    std::cout << "Executing Moves" << std::endl;
-
     // TODO: Return more advanced error states
 
     if( mGameBoard ) {
@@ -46,8 +46,6 @@ bool engine::shapeset::ShapeSetManager_t::ExecuteMoves( std::vector< engine::boa
 
 void engine::shapeset::ShapeSetManager_t::AddResource( int xPos, int yPos ) {
 
-    std::cout << "Adding Resource to shapeset" << std::endl;
-
     auto concatSet = GetNeighborSets( xPos, yPos );
 
     // Also insert our new point; NOTE that the staged board should be updated with the correct color at this point, so we just get it from there
@@ -60,14 +58,23 @@ void engine::shapeset::ShapeSetManager_t::AddResource( int xPos, int yPos ) {
 
     mPointSets.insert( concatSet );
 
-    std::cout << "Sets in pointSets: " << mPointSets.size() << std::endl;
-    std::cout << "Elements in concatSet: " << concatSet->size() << std::endl;
-    std::cout << std::endl;
+
+    #ifdef LOG_SHAPE_SET
+        std::cout << "[Adding] Resource to shapeset" << std::endl;
+        std::cout << "Sets in pointSets: " << mPointSets.size() << std::endl;
+        std::cout << "Elements in concatSet: " << concatSet->size() << std::endl;
+        std::cout << "[ENDOF Adding] Resource to shapeset" << std::endl;
+        std::cout << std::endl;
+    #endif
+
 }
 
 void engine::shapeset::ShapeSetManager_t::RemoveResource( int xPos, int yPos ) {
 
-    std::cout << "Removing Resource from shapeset" << std::endl;
+    #ifdef LOG_SHAPE_SET
+        std::cout << "[Removing] Resource from shapeset" << std::endl;
+        std::cout << std::endl;
+    #endif
 
     // Should only be one set, but we use this for convenience
     auto concatSet = GetNeighborSets( xPos, yPos );
@@ -83,6 +90,12 @@ void engine::shapeset::ShapeSetManager_t::RemoveResource( int xPos, int yPos ) {
             AddResource( thePoint->Location.xPos, thePoint->Location.yPos );
         }
     }  
+
+    #ifdef LOG_SHAPE_SET
+        std::cout << "Sets in pointSets: " << mPointSets.size() << std::endl;
+        std::cout << "[ENDOF Deleting] Resource to shapeset" << std::endl;
+        std::cout << std::endl;
+    #endif
 }
 
 engine::shapeset::ShapeSetManager_t::PointSet_t engine::shapeset::ShapeSetManager_t::GetNeighborSets( int xPos, int yPos ) {
@@ -99,8 +112,6 @@ engine::shapeset::ShapeSetManager_t::PointSet_t engine::shapeset::ShapeSetManage
             pointSet.insert( mLocationToPointSetMap[ theNeighborLocationPair ] );
         }
     }
-
-    std::cout << "Unique point sets found: " << pointSet.size() << std::endl;
 
     // Create a new set that we will put all the neighboring points into
     auto concatSet = std::make_shared< std::vector< std::shared_ptr< engine::board::BoardCellState_t > > >();

@@ -1,3 +1,5 @@
+//#define LOG_RULE_DFA
+
 #include <iostream>
 #include <memory>
 #include <map>
@@ -14,8 +16,6 @@ mGeneratingLocations( std::move( aGeneratingLocations ) )
 
 void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< engine::shapeset::ShapeSetManager_t::PointSet_t >& aPointSets ) {
     
-    std::cout << "RuleDFA_T::PointSetsUpdated: " << aPointSets.size() << std::endl;
-
     mGeneratingLocations->clear();
     
     for( auto& thePointSet : aPointSets ) {
@@ -46,7 +46,6 @@ void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< eng
 }
 
 engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aShapePoints ) {
-    std::cout << "RuleDFA_T::PassShapeThroughDFA" << std::endl;
     
     auto theCurrentState = mDFAStartNode;
 
@@ -59,7 +58,6 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
     theResponse.LeftTopCorner = thePointBounds.LeftTopCorner;
 
     for( auto& theInputCharacter : theInputString ) {
-        std::cout << "Transitioning pass: " << theCurrentState->Transition.size() << std::endl;
 
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
         if( theCurrentState->Transition.find( inputCharacterPair ) == theCurrentState->Transition.end() ) {
@@ -92,7 +90,6 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
     auto theInputString = ConvertPointsToLanguage( aRule.RulePoints, thePointBounds );
 
     for( auto& theInputCharacter : theInputString ) {
-        std::cout << "Transitioning add rule" << std::endl;
 
         // Using structs as keys are annoying, so we just use a pair
         std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
@@ -117,11 +114,12 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
 
 std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints, 
                                                                                                               const engine::ruleset::PointBounds_t& aPointBounds ) {
-    std::cout << "RuleDFA_t::ConvertPointsToLanguage" << std::endl;
     
-    std::cout << "Point bounds width: " << aPointBounds.recWidth << " height: " << aPointBounds.recHeight << std::endl;
-    std::cout << "Point bounds xCorn: " << aPointBounds.LeftTopCorner.xPos << " yCorn: " << aPointBounds.LeftTopCorner.yPos << std::endl;
- 
+    #ifdef LOG_RULE_DFA
+        std::cout << "Point bounds width: " << aPointBounds.recWidth << " height: " << aPointBounds.recHeight << std::endl;
+        std::cout << "Point bounds xCorn: " << aPointBounds.LeftTopCorner.xPos << " yCorn: " << aPointBounds.LeftTopCorner.yPos << std::endl;
+    #endif
+
     std::vector< engine::ruleset::LanguageInputCharacter_t > inputString;
     
     if( aRulePoints.size() == 0 ) {

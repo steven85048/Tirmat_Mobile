@@ -128,7 +128,7 @@ bool engine::board::GameBoard_t::IsValidPosition( int moveX, int moveY ) const {
     return moveX < mBoardWidth && moveX >= 0 && moveY < mBoardHeight && moveY >= 0;
 }
 
-void engine::board::GameBoard_t::PrintBoard() {
+void engine::board::GameBoard_t::PrintBoard() const {
     std::cout << std::endl;
     static const std::string ResourceTypeString[8] = { "EMPTY", "IGNORE", "L1", "L2", "L3", "L4", "L5", "L6" };
 

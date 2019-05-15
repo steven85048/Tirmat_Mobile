@@ -5,6 +5,11 @@ engine::move::UndoController_t::UndoController_t()
 }
 
 void engine::move::UndoController_t::AddUndoMoveBatch( const engine::board::GameBoardMoveBatch_t& aMoveBatch ) {
+    
+    if( aMoveBatch.IsUndo ) {
+        return;
+    }
+    
     engine::board::GameBoardMoveBatch_t theUndoMoveBatch;
     theUndoMoveBatch.IsUndo = true;
 

@@ -36,10 +36,13 @@ void engine::initialization::GameBoardFactory_t::InitializeForTesting() {
     auto point2 = std::make_shared< engine::board::BoardCellState_t >(1,0);
     point2->Resource = engine::board::ResourceType_t::L2;
 
+    auto point3 = std::make_shared< engine::board::BoardCellState_t >(1,1);
+    point3->Resource = engine::board::ResourceType_t::L3;
+
     theRule.RulePoints.push_back(point1);
     theRule.RulePoints.push_back(point2);
 
-    theRule.IsLevelCompletionRule = true;
+    theRule.GeneratePoints.push_back(point3);
 
     theRuleDFA->AddRuleToDFA( theRule );
 
@@ -63,5 +66,19 @@ void engine::initialization::GameBoardFactory_t::InitializeForTesting() {
     theMoveBatch.Moves.push_back(move1);
     theMoveBatch.Moves.push_back(move2);
 
+    theGameStateContainer.PrintState();
+
     theMoveManager->ExecuteMoves( theMoveBatch );
+    theGameStateContainer.PrintState();
+
+    engine::board::GameBoardMoveBatch_t theMoveBatchGenerate;
+    theMoveBatchGenerate.IsGenerating = true;
+    theMoveManager->ExecuteMoves( theMoveBatchGenerate );
+    theGameStateContainer.PrintState();
+
+    theMoveManager->PopUndoMoves();
+    theGameStateContainer.PrintState();
+
+    theMoveManager->PopUndoMoves();
+    theGameStateContainer.PrintState();
 }

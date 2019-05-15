@@ -41,7 +41,7 @@ bool RunMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
 std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const override;
 
 // For Testing
-void PrintBoard();
+void PrintBoard() const;
 
 // --------------------------------------------------------
 private: // FUNCTIONS
