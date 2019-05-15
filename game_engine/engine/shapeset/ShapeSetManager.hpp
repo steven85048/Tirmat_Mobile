@@ -13,6 +13,7 @@ namespace shapeset
 {
 
 // Manages the shapes that are active on the board through a set of disjoint set operations
+// A shape are all cells connected through cardinal directions.
 // --------------------------------------------------------
 class ShapeSetManager_t 
 // --------------------------------------------------------

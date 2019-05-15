@@ -10,6 +10,8 @@ namespace engine
 namespace board
 {
 
+// Handles the validation and update of user resources; contains the shared
+// resource state
 class UserResources_t
 {
 // --------------------------------------------------------

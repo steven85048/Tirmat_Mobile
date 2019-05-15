@@ -14,6 +14,8 @@ namespace engine
 namespace ruleset
 {
 
+// Handles rule-matching functionality, allowing the creation
+// of new rules and matching of shapes with existing rules
 class RuleDFA_t
 {
 
