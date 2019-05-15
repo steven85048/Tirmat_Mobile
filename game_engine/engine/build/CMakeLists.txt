@@ -25,8 +25,9 @@ SET(state_src_files
         "../state/UserStateContainer.cpp"
 )
 
-SET(engine_src_files 
+SET(move_src_files 
         "../move/MoveManager.cpp"
+        "../move/UndoController.cpp"
 )
 
 # Define our library
@@ -36,7 +37,7 @@ add_library(engine SHARED ${board_src_files}
                           ${ruleset_src_files} 
                           ${shapeset_src_files}  
                           ${state_src_files}
-                          ${engine_src_files} )
+                          ${move_src_files} )
 
 # Set library compilation features
 target_compile_features(engine

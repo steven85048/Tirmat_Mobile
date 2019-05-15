@@ -19,6 +19,7 @@ enum class ResourceType_t {
     EMPTY,
     IGNORE,
     REFUND,
+    GENERATING,
     L1,
     L2,
     L3,
@@ -86,9 +87,15 @@ struct GameBoardMoveBatch_t {
     std::vector< GameBoardMove_t > Moves;
     std::unordered_map< ResourceType_t, int > ResourceUsage;
     bool IsGenerating;
+    bool IsUndo;
 
     // Updates the resource usage map with the resource usages specified in Moves
     void UpdateResourceUsage() {
+        // The undo resources should already be set, so we shouldn't need to do anything
+        if( IsUndo ) {
+            return;
+        }
+
         for( auto& theMove : Moves ) {
             if( theMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
                 if( theMove.Resource ) { 
@@ -103,6 +110,10 @@ struct GameBoardMoveBatch_t {
     // After the moves are processed, this method reupdates ResourceUsages with the
     // refunds on removing a resource
     void ProcessRefunds() {
+        if( IsUndo ) {
+            return;
+        }
+
         for( auto& theMove : Moves ) {
             if( theMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
                 if( theMove.PreviousResource ) {

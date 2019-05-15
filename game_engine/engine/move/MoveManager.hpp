@@ -4,6 +4,7 @@
 
 #include "engine/board/Types.hpp"
 #include "engine/board/UserResources.hpp"
+#include "engine/move/UndoController.hpp"
 #include "engine/ruleset/RuleDFA.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 
@@ -25,6 +26,7 @@ MoveManager_t(  std::unique_ptr< engine::ruleset::RuleDFA_t > aRuleDFA,
                 std::unique_ptr< engine::board::UserResources_t > aUserResources );
 
 void ExecuteMoves( engine::board::GameBoardMoveBatch_t& aMoveBatch );
+void PopUndoMoves();
 
 // --------------------------------------------------------
 private: // FUNCTIONS
@@ -37,6 +39,7 @@ private: // DATA
     std::unique_ptr< engine::ruleset::RuleDFA_t > mRuleDFA;
     std::unique_ptr< engine::shapeset::ShapeSetManager_t > mShapeSetManager;
     std::unique_ptr< engine::board::UserResources_t > mUserResources;
+    std::unique_ptr< engine::move::UndoController_t > mUndoController;
 };
 
 } // ENDOF move
