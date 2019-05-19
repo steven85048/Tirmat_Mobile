@@ -9,11 +9,9 @@ class GameLevelActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_level)
-
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
     }
 
+    /** TODO: add engine library through djinni
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
@@ -27,4 +25,5 @@ class GameLevelActivity : Activity() {
             System.loadLibrary("native-lib")
         }
     }
+    **/
 }
