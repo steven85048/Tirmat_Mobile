@@ -1,33 +1,36 @@
-package com.example.steve.tirmat_android.GameLevelSurface
+package com.example.steve.tirmat_android.game_surface
 
 import android.graphics.Canvas
+import android.util.Log
 
 class RenderThread : Thread {
-    private var mGameView : GameView? = null;
-    private var mThreadActive : Boolean = false;
+    private var mGameView : GameView? = null
+    private var mThreadActive : Boolean = false
 
     constructor( aGameView : GameView ) {
-        mGameView = aGameView;
+        mGameView = aGameView
     }
 
     fun startRender() {
-        mThreadActive = true;
+        mThreadActive = true
     }
 
     fun cancelRender() {
-        mThreadActive = false;
+        mThreadActive = false
     }
 
     // Thread OVERRIDES
 
     override fun run() {
         while( mThreadActive ) {
-            var theCanvas : Canvas? = null;
+            var theCanvas : Canvas? = null
             try {
-                theCanvas = mGameView?.getHolder()?.lockCanvas();
+                theCanvas = mGameView?.getHolder()?.lockCanvas()
 
                 mGameView?.let {
                     synchronized( it.getHolder() ) {
+                        Log.e( "RenderThread.kt", "Rendering next canvas frame" )
+                        this.mGameView?.drawCanvas( theCanvas )
                         it.drawCanvas( theCanvas );
                     }
                 }
