@@ -5,14 +5,16 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.example.steve.tirmat_android.game_surface.surface_event.SurfaceEventController
 
 // Holds and handles events from the game SurfaceView
 // Starts background rendering thread, receives draw events from that,
 // and then tells the gameElementManager to draw its elements
 class GameView : SurfaceView, SurfaceHolder.Callback {
     private var mContext : Context? = null
-    private var mSurfaceHolder : SurfaceHolder? = null
     private var mGameElementManager : GameElementManager? = null;
+    private var mSurfaceEventController : SurfaceEventController? = null;
+    private var mSurfaceHolder : SurfaceHolder? = null
 
     private var mRenderThread : RenderThread? = null
 
@@ -21,6 +23,7 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
 
         mRenderThread = RenderThread(this)
         mGameElementManager = GameElementManager( this )
+        mSurfaceEventController = SurfaceEventController( mGameElementManager )
 
         mSurfaceHolder = getHolder()
         mSurfaceHolder?.addCallback(this)
@@ -38,7 +41,9 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
     // ==============================================
     // SurfaceView OVERRIDES
     // ==============================================
+
     override fun onTouchEvent( aEvent : MotionEvent ): Boolean {
+        mSurfaceEventController?.onSurfaceMotionEvent( aEvent )
         return true
     }
 
