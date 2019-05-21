@@ -6,11 +6,11 @@ import android.graphics.Color
 // Creates the various game elements needed on the game surface
 class GameElementFactory {
     companion object {
-        fun createTestObject( aX : Int, aY : Int ) : GameElement {
+        fun createBoardResource( aX : Int, aY : Int, resourceSize : Int ) : GameElement {
             val color : Int = Color.WHITE
             val maskFilter : BlurMaskFilter = BlurMaskFilter( 8f, BlurMaskFilter.Blur.NORMAL )
 
-            val newElement : GameElement = BoardResource( aX, aY, color, maskFilter )
+            val newElement : GameElement = BoardResource( aX, aY, resourceSize, color, maskFilter )
             return newElement
         }
     }

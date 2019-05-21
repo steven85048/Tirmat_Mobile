@@ -1,6 +1,7 @@
 package com.example.steve.tirmat_android.game_surface
 
 import android.graphics.Canvas
+import com.example.steve.tirmat_android.game_surface.game_element.GameBoard
 import com.example.steve.tirmat_android.game_surface.game_element.GameElement
 import com.example.steve.tirmat_android.game_surface.game_element.GameElementFactory
 
@@ -10,21 +11,16 @@ import com.example.steve.tirmat_android.game_surface.game_element.GameElementFac
 class GameElementManager {
 
     private var mGameView : GameView? = null
-
-    private var mTestResource1 : GameElement? = null;
-    private var mTestResource2 : GameElement? = null;
+    private var mGameBoard : GameBoard? = null
 
     constructor( aGameView : GameView ) {
         mGameView = aGameView
-
-        mTestResource1 = GameElementFactory.createTestObject(25, 25)
-        mTestResource2 = GameElementFactory.createTestObject( 75, 75)
+        mGameBoard = GameBoard()
     }
 
     // Game elements draw onto the canvas as necessary
     fun onDraw( aCanvas : Canvas ) {
-        mTestResource1?.onDraw(aCanvas)
-        mTestResource2?.onDraw(aCanvas)
+        mGameBoard?.onDraw( aCanvas )
     }
 
     // Receives updated game state from the engine

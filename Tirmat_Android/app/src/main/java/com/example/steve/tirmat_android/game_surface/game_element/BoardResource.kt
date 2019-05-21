@@ -6,6 +6,10 @@ class BoardResource : GameElement {
 
     var topX : Int? = null
     var topY : Int? = null
+    var resourceSize : Int? = null
+
+    // Will be replaced by shared resource object in future
+    var resourceType : Int? = null
 
     var previousCanvasWidth : Double? = null
     var previousCanvasHeight : Double? = null
@@ -14,9 +18,10 @@ class BoardResource : GameElement {
     var mRenderRect : Rect? = null
     var mIsElementDirty : Boolean = true
 
-    constructor( aX : Int, aY : Int, aColor : Int, aMaskFilter : BlurMaskFilter ) {
+    constructor( aX : Int, aY : Int, aSize : Int, aColor : Int, aMaskFilter : BlurMaskFilter ) {
         topX = aX
         topY = aY
+        resourceSize = aSize
 
         mResourcePaint = Paint(0).apply {
             color = aColor
@@ -33,6 +38,7 @@ class BoardResource : GameElement {
     override fun onDraw( aCanvas : Canvas ) {
         val currTopX = topX?.toDouble()
         val currTopY = topY?.toDouble()
+        val currResourceSize = resourceSize?.toDouble()
 
         val canvasWidth : Double = aCanvas.width.toDouble()
         val canvasHeight : Double = aCanvas.height.toDouble()
@@ -44,12 +50,12 @@ class BoardResource : GameElement {
             mIsElementDirty = true
         }
 
-        if( currTopX != null && currTopY != null && mIsElementDirty ) {
+        if( currTopX != null && currTopY != null && currResourceSize != null && mIsElementDirty ) {
 
-            val left = ( canvasWidth * ( currTopX / ScaleUtilities.SCALED_WIDTH) ).toInt()
-            val top = ( canvasWidth * (currTopY / ScaleUtilities.SCALED_HEIGHT) ).toInt()
-            val right = ( canvasWidth * ((currTopX + 20) / ScaleUtilities.SCALED_WIDTH) ).toInt()
-            val bottom = ( canvasWidth * ((currTopY + 20) / ScaleUtilities.SCALED_HEIGHT) ).toInt()
+            val left = ( canvasWidth * ( currTopX / BoardConfig.SCALED_WIDTH) ).toInt()
+            val top = ( canvasWidth * (currTopY / BoardConfig.SCALED_HEIGHT) ).toInt()
+            val right = ( canvasWidth * ((currTopX + currResourceSize) / BoardConfig.SCALED_WIDTH) ).toInt()
+            val bottom = ( canvasWidth * ((currTopY + currResourceSize) / BoardConfig.SCALED_HEIGHT) ).toInt()
 
             mRenderRect = Rect(left, top, right, bottom )
 
@@ -57,9 +63,6 @@ class BoardResource : GameElement {
         }
 
         aCanvas.drawRect(mRenderRect, mResourcePaint)
-        val testPaint : Paint = Paint(0).apply{ color = 0x50505 }
-        aCanvas.drawLine(0F, 0F, 20F, 20F, testPaint);
-
     }
 
     override fun hasCollided( aX : Int, aY : Int ) {
