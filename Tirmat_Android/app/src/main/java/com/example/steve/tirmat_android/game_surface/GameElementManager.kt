@@ -1,8 +1,8 @@
 package com.example.steve.tirmat_android.game_surface
 
 import android.graphics.Canvas
-import com.example.steve.tirmat_android.game_surface.game_element.BoardResource
 import com.example.steve.tirmat_android.game_surface.game_element.GameElement
+import com.example.steve.tirmat_android.game_surface.game_element.GameElementFactory
 
 // Holds onto game elements and renders them as necessary
 // Also handles game element thread safety - while the canvas
@@ -17,14 +17,14 @@ class GameElementManager {
     constructor( aGameView : GameView ) {
         mGameView = aGameView
 
-        mTestResource1 = BoardResource(50, 50)
-        mTestResource2 = BoardResource( 150, 150)
+        mTestResource1 = GameElementFactory.createTestObject(25, 25)
+        mTestResource2 = GameElementFactory.createTestObject( 75, 75)
     }
 
     // Game elements draw onto the canvas as necessary
     fun onDraw( aCanvas : Canvas ) {
-        mTestResource1?.onDraw( aCanvas )
-        mTestResource2?.onDraw( aCanvas )
+        mTestResource1?.onDraw(aCanvas)
+        mTestResource2?.onDraw(aCanvas)
     }
 
     // Receives updated game state from the engine

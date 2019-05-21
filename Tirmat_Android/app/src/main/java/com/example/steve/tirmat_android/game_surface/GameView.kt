@@ -2,6 +2,10 @@ package com.example.steve.tirmat_android.game_surface
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -49,6 +53,8 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
 
     // SurfaceHolder.Callback OVERRIDES
     override fun surfaceDestroyed(aHolder : SurfaceHolder) {
+        Log.e("GameView", "SurfaceDestroyed");
+
         mRenderThread?.let {
             it?.cancelRender()
             it?.join()
@@ -56,6 +62,8 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
     }
 
     override fun surfaceCreated(aHolder : SurfaceHolder) {
+        Log.e("GameView", "SurfaceCreated");
+
         mRenderThread?.let {
             it?.startRender()
             it?.start()
@@ -63,6 +71,6 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
     }
 
     override fun surfaceChanged(aHolder : SurfaceHolder, aFormat : Int, aWidth : Int, aHeight : Int) {
-
+        mSurfaceHolder = aHolder;
     }
 }
