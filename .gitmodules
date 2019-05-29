@@ -1,0 +1,3 @@
+[submodule "dependencies/djinni"]
+	path = dependencies/djinni
+	url = https://github.com/dropbox/djinni.git
