@@ -15,7 +15,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags ""
+                version "3.8.0"
+                cppFlags "-std=c++1z -fexceptions"
+                abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
             }
         }
     }
@@ -25,9 +27,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    // runs the djinni generation script in game_engine
+    // NOTE this only works currently on linux; have not found a way to build on windows
+    task PreBuild {
+        exec {
+            workingDir './../../game_engine/build/'
+            commandLine 'python', 'run_djinni.py'
+        }
+    }
+
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path "../../game_engine/build/CMakeLists.txt"
         }
     }
 }

@@ -24,7 +24,6 @@ java_package = "com.example.steve.engine"
 ## Set the generation directories
 
 script_directory = cleanPath( os.path.dirname(os.path.abspath(__file__)) )
-print(script_directory)
 
 # Set to the root of the engine
 generated_dir = script_directory + "/../generated"
@@ -42,7 +41,7 @@ djinni_exec = "../../dependencies/djinni/src/run"
 ## Remove the current generated folder for regeneration
 # May want to optimize so that regeneration occurs only if the file has changed
 
-subprocess.call(["rm", "-rf", generated_dir])
+#subprocess.call(["rm", "-rf", generated_dir])
 
 ## Djinni generation
 
@@ -51,18 +50,19 @@ for djinni_file in djinni_files:
     if not file_exists:
         print("Djinni File " + djinni_file + " does not exist!")
         continue
-
+    
     subprocess.call( [  
         "bash", djinni_exec,
         "--java-out", java_out,
-        "--java_package", java_package,
-        "--ident-java-field", "mFooBar"
+        "--java-package", java_package,
+        "--ident-java-field", "mFooBar",
         "--cpp-out", cpp_out,
         "--cpp-namespace", cpp_namespace,
         "--jni-out", jni_out,
-        "ident-jni-class", "NativeFooBar",
-        "ident-jni-file", "NativeFooBar",
+        "--ident-jni-class", "NativeFooBar",
+        "--ident-jni-file", "NativeFooBar",
         "--objc-out", objc_out,
         "--objcpp-out", objc_out,
         "--idl", djinni_file
     ], shell=True)
+    

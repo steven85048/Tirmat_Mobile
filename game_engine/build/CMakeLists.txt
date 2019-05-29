@@ -24,6 +24,7 @@ target_link_libraries(game_engine engine)
 set_target_properties(game_engine 
     PROPERTIES
         CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
 )
 
