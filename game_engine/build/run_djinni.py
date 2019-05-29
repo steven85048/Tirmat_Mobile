@@ -1,3 +1,5 @@
+# MUST be run from a shell (e.g. git bash) or on linux
+
 # This file is currently created with a single djinni file in mind
 # TODO: May want to make it more extensible later
 
@@ -40,8 +42,7 @@ djinni_exec = "../../dependencies/djinni/src/run"
 ## Remove the current generated folder for regeneration
 # May want to optimize so that regeneration occurs only if the file has changed
 
-# LINUX:
-# subprocess.call(["rm", "-rf", generated_dir])
+subprocess.call(["rm", "-rf", generated_dir])
 
 ## Djinni generation
 
