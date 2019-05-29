@@ -27,7 +27,15 @@ struct EnumStrings_t {
             case engine::board::ResourceType_t::L5: 
                 return "5";
             case engine::board::ResourceType_t::L6: 
-                return "6";   
+                return "6"; 
+            case engine::board::ResourceType_t::EMPTY:
+                return "E";
+            case engine::board::ResourceType_t::IGNORE:
+                return "I";
+            case engine::board::ResourceType_t::REFUND:
+                return "R";
+            case engine::board::ResourceType_t::GENERATING:
+                return "G";
         }
 
         return "UNKNOWN";

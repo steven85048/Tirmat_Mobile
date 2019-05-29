@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 26
     defaultConfig {
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
         applicationId "com.example.steve.tirmat_android"
         minSdkVersion 15
         targetSdkVersion 26
@@ -39,6 +42,7 @@ android {
 
     externalNativeBuild {
         cmake {
+            // path "./CMakeLists.txt"
             path "../../game_engine/build/CMakeLists.txt"
         }
     }
