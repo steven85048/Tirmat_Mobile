@@ -23,6 +23,12 @@ class GameElementManager {
         mGameBoard?.onDraw( aCanvas )
     }
 
+    fun getCollidedElement( aX : Int, aY : Int ) : GameElement? {
+        // just return the board's element for now
+        var theCollidedElement = mGameBoard?.getCollidedElement( aX, aY )
+        return theCollidedElement
+    }
+
     // Receives updated game state from the engine
     // and modifies game elements
     fun onGameStateUpdate() {

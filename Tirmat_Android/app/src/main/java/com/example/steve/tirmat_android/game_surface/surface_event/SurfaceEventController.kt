@@ -20,6 +20,7 @@ class SurfaceEventController {
 
         when( action ) {
             MotionEvent.ACTION_DOWN -> {
+                var gameElement = mGameElementManager?.getCollidedElement( aMotionEvent.x.toInt(), aMotionEvent.y.toInt() )
                 Log.e("SurfaceEventController", "ACTION_DOWN")
             }
 

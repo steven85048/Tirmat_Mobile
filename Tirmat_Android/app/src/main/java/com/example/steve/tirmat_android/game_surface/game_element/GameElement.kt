@@ -4,5 +4,5 @@ import android.graphics.Canvas
 
 interface GameElement {
     fun onDraw( aCanvas : Canvas)
-    fun hasCollided( aX : Int, aY : Int )
+    fun hasCollided( aX : Int, aY : Int ) : Boolean?
 }

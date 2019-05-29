@@ -5,38 +5,57 @@ import android.graphics.Canvas
 // Holds the cells on the game board and groups up
 // the draw and update operations
 class GameBoard {
-    var gameBoard : MutableList< MutableList< GameElement > >? = null;
+    var mGameBoard : MutableList< MutableList< GameElement > >? = null;
 
-    constructor() {
-        // Initialize our board with empty cells for now
-        // will be based on the game state later
-        initGameBoard()
-    }
+    constructor() {}
 
     // Allocate memory for the game board
-    private fun initGameBoard() {
-        gameBoard = ArrayList< MutableList< GameElement > >()
+    private fun initmGameBoard( aCanvasWidth : Int, aCanvasHeight : Int ) {
+        mGameBoard = ArrayList< MutableList< GameElement > >()
 
         for( indexX in 0 until BoardConfig.BOARD_WIDTH ) {
             var currList : MutableList< GameElement > = ArrayList< GameElement >()
 
             for( indexY in 0 until BoardConfig.BOARD_HEIGHT ) {
-                var newElement : GameElement = GameElementFactory.createBoardResource( indexX * BoardConfig.RESOURCE_SIZE, indexY * BoardConfig.RESOURCE_SIZE, BoardConfig.RESOURCE_SIZE )
+
+                var newElement : GameElement = GameElementFactory.createBoardResource( indexX, indexY, BoardConfig.calculateResourceSize( aCanvasWidth, aCanvasHeight ) )
                 currList?.add( newElement )
             }
 
-            gameBoard?.add( currList )
+            mGameBoard?.add( currList )
         }
     }
 
     fun onDraw( aCanvas : Canvas) {
-        gameBoard?.let {
+        if( mGameBoard == null ) {
+            initmGameBoard( aCanvas.width, aCanvas.height )
+        }
+
+        mGameBoard?.let {
             for (resourceList in it) {
                 for (resource in resourceList) {
                     resource.onDraw( aCanvas )
                 }
             }
         }
+    }
+
+    fun getCollidedElement( aX : Int, aY : Int ) : GameElement? {
+        mGameBoard?.let {
+            for (resourceList in it) {
+                for (resource in resourceList) {
+                    var hasCollided = resource.hasCollided( aX, aY )
+
+                    hasCollided?.let {
+                        if( it ) {
+                            return resource
+                        }
+                    }
+                }
+            }
+        }
+
+        return null
     }
 
     fun onGameStateUpdate() {
