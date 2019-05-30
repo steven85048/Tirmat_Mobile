@@ -42,8 +42,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            // path "./CMakeLists.txt"
-            path "../../game_engine/build/CMakeLists.txt"
+            path "../../game_engine/build/android/CMakeLists.txt"
         }
     }
 }

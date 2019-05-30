@@ -1,0 +1,4 @@
+GameInteractor = interface +c {
+    static Create(): GameInteractor;
+    Test(): string;
+}

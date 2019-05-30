@@ -29,7 +29,7 @@ script_directory = cleanPath( os.path.dirname(os.path.abspath(__file__)) )
 generated_dir = script_directory + "/../generated"
 
 # List of djinni files to generate from
-djinni_files = [ script_directory + '/../engine/GameInteractor.djinni' ]
+djinni_files = [ script_directory + '/../engine/state/GameInteractor.djinni' ]
 
 cpp_out = generated_dir + "/cpp"
 objc_out = generated_dir + "/objc"

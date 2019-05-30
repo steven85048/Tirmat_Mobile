@@ -1,7 +1,7 @@
 # Creates a shared library for just board functionality
 # Allows us to easily test just this library
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.8.0)
 
 # Define the source and header files in our project
 SET(target_src_files 
