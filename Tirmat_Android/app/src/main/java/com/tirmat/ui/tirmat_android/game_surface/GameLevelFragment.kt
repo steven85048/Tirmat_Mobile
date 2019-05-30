@@ -1,16 +1,15 @@
-package com.example.steve.tirmat_android.game_surface
+package com.tirmat.ui.tirmat_android.game_surface
 
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.app.Fragment
 import android.view.LayoutInflater
-import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 
-import com.example.steve.tirmat_android.R
+import com.tirmat.steve.tirmat_android.R
 
 
 class GameLevelFragment : Fragment() {
@@ -33,8 +32,8 @@ class GameLevelFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Attach the game surface to the game
-        var surfaceContainer : LinearLayout? = view?.findViewById( GameLevelFragment.SURFACE_CONTAINER_ID );
-        gameSurfaceView = GameView( getActivity().applicationContext );
+        var surfaceContainer : LinearLayout? = view?.findViewById(SURFACE_CONTAINER_ID);
+        gameSurfaceView = GameView(getActivity().applicationContext);
 
         surfaceContainer?.addView( gameSurfaceView );
     }

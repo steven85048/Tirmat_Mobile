@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameLevelActivity">
+    tools:context="com.tirmat.ui.tirmat_android.GameLevelActivity">
 
     <fragment
-        android:name="com.example.steve.tirmat_android.game_surface.GameLevelFragment"
+        android:name="com.tirmat.ui.tirmat_android.game_surface.GameLevelFragment"
         android:id="@+id/game_level_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

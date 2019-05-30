@@ -18,7 +18,7 @@ cpp_namespace = "engine"
 objc_prefix = "engine"
 
 # Java Package Name
-java_package = "com.example.steve.generated"
+java_package = "com.tirmat.ui.generated"
 
 ## Set the generation directories
 
@@ -33,7 +33,7 @@ djinni_files = [ script_directory + '/../engine/state/GameInteractor.djinni' ]
 cpp_out = generated_dir + "/cpp"
 objc_out = generated_dir + "/objc"
 jni_out = generated_dir + "/jni"
-java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/example/steve/generated"
+java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated"
 
 djinni_exec = "../../dependencies/djinni/src/run"
 

@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android.game_surface.game_element
+package com.tirmat.ui.tirmat_android.game_surface.game_element
 
 import android.graphics.BlurMaskFilter
 import android.graphics.Color
@@ -10,7 +10,7 @@ class GameElementFactory {
             val color : Int = Color.WHITE
             val maskFilter : BlurMaskFilter = BlurMaskFilter( 8f, BlurMaskFilter.Blur.NORMAL )
 
-            val newElement : GameElement = BoardResource( indexX, indexY, resourceSize, color, maskFilter )
+            val newElement : GameElement = BoardResource(indexX, indexY, resourceSize, color, maskFilter)
             return newElement
         }
     }

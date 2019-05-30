@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android
+package com.tirmat.steve.tirmat_android
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.example.steve.tirmat_android", appContext.packageName)
+        assertEquals("com.tirmat.steve.tirmat_android", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android.game_surface.game_element
+package com.tirmat.ui.tirmat_android.game_surface.game_element
 
 import android.graphics.*
 

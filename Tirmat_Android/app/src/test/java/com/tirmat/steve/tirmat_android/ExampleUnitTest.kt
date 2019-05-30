@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android
+package com.tirmat.steve.tirmat_android
 
 import org.junit.Test
 

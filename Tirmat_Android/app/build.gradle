@@ -10,7 +10,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
-        applicationId "com.example.steve.tirmat_android"
+        applicationId "com.tirmat.steve.tirmat_android"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1

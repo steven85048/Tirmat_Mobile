@@ -1,8 +1,8 @@
-package com.example.steve.tirmat_android.game_surface.surface_event
+package com.tirmat.ui.tirmat_android.game_surface.surface_event
 
 import android.util.Log
 import android.view.MotionEvent
-import com.example.steve.tirmat_android.game_surface.GameElementManager
+import com.tirmat.ui.tirmat_android.game_surface.GameElementManager
 
 // Handles motion events received from the surface;
 // Generates Event object depending on the analyzed state

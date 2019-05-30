@@ -10,6 +10,5 @@ int main()
     engine::initialization::GameBoardFactory_t theFactory;
     theFactory.InitializeForTesting();
 
-
     return 0;
 }

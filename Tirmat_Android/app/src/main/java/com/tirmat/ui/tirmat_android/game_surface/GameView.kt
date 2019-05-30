@@ -1,15 +1,12 @@
-package com.example.steve.tirmat_android.game_surface
+package com.tirmat.ui.tirmat_android.game_surface
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import com.example.steve.tirmat_android.game_surface.surface_event.SurfaceEventController
+import com.tirmat.ui.tirmat_android.game_surface.surface_event.SurfaceEventController
 
 // Holds and handles events from the game SurfaceView
 // Starts background rendering thread, receives draw events from that,
@@ -26,8 +23,8 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
         mContext = context
 
         mRenderThread = RenderThread(this)
-        mGameElementManager = GameElementManager( this )
-        mSurfaceEventController = SurfaceEventController( mGameElementManager )
+        mGameElementManager = GameElementManager(this)
+        mSurfaceEventController = SurfaceEventController(mGameElementManager)
 
         mSurfaceHolder = getHolder()
         mSurfaceHolder?.addCallback(this)

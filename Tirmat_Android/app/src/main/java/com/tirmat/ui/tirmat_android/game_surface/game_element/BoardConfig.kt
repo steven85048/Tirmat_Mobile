@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android.game_surface.game_element
+package com.tirmat.ui.tirmat_android.game_surface.game_element
 
 class BoardConfig {
 
@@ -16,8 +16,8 @@ class BoardConfig {
 
         fun calculateResourceSize( aCanvasWidth : Int, aCanvasHeight : Int ) : Int {
 
-            val dimX = ( aCanvasWidth - 2 * MARGIN_SIDES ) / BOARD_WIDTH
-            val dimY = ( aCanvasHeight - MAX_MARGIN_TOP ) / BOARD_HEIGHT
+            val dimX = ( aCanvasWidth - 2 * MARGIN_SIDES) / BOARD_WIDTH
+            val dimY = ( aCanvasHeight - MAX_MARGIN_TOP) / BOARD_HEIGHT
 
             return Math.min( dimX, dimY )
         }

@@ -1,9 +1,8 @@
-package com.example.steve.tirmat_android.game_surface
+package com.tirmat.ui.tirmat_android.game_surface
 
 import android.graphics.Canvas
-import com.example.steve.tirmat_android.game_surface.game_element.GameBoard
-import com.example.steve.tirmat_android.game_surface.game_element.GameElement
-import com.example.steve.tirmat_android.game_surface.game_element.GameElementFactory
+import com.tirmat.ui.tirmat_android.game_surface.game_element.GameBoard
+import com.tirmat.ui.tirmat_android.game_surface.game_element.GameElement
 
 // Holds onto game elements and renders them as necessary
 // Also handles game element thread safety - while the canvas
@@ -13,7 +12,7 @@ class GameElementManager {
     private var mGameView : GameView? = null
     private var mGameBoard : GameBoard? = null
 
-    constructor( aGameView : GameView ) {
+    constructor( aGameView : GameView) {
         mGameView = aGameView
         mGameBoard = GameBoard()
     }

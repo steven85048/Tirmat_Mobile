@@ -1,4 +1,4 @@
-package com.example.steve.tirmat_android.game_surface
+package com.tirmat.ui.tirmat_android.game_surface
 
 import android.graphics.Canvas
 import android.util.Log
@@ -7,7 +7,7 @@ class RenderThread : Thread {
     private var mGameView : GameView? = null
     private var mThreadActive : Boolean = false
 
-    constructor( aGameView : GameView ) {
+    constructor( aGameView : GameView) {
         mGameView = aGameView
     }
 
