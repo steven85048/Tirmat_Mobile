@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameInteractor.hpp"
+#include "engine/state/GameInteractor.hpp"
 
 namespace engine
 {
@@ -10,7 +10,7 @@ namespace state
 
 // This class features the main talking point for the UI to interact
 // with the engine
-class GameActionInteractor_t : public engine::GameInteractor
+class GameActionInteractor_t : public engine::state::GameInteractor
 {
 
 // --------------------------------------------------------
@@ -23,7 +23,6 @@ public: // FUNCTIONS
 public: // GameInteractor OVERRIDES
 // --------------------------------------------------------
 
-    std::string Test() override;
 };
 
 }

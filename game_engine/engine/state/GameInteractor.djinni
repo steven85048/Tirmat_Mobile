@@ -1,4 +1,18 @@
+# UI -> Engine communication (tells engine to do things)
 GameInteractor = interface +c {
-    static Create(): GameInteractor;
-    Test(): string;
+}
+
+# Engine -> UI communication of state
+GameStateListener = interface +j +o {
+}
+
+# Entry point of the engine; provides the engine dependencies
+GameEngineFactory = interface +c {
+    static Create(): GameEngineFactory;
+
+    # Adds another listener that can receive events from the engine
+    AddEngineStateListener( aListener : GameStateListener );
+
+    # Retrieve the object that can be used to interact with the engine
+    GetGameInteractor(): GameInteractor;
 }

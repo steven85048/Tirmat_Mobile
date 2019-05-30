@@ -9,31 +9,15 @@ import os
 def cleanPath( path ):
     return path.replace("\\", "/")
 
-## Set the namespace, prefix, etc.
-
-# C++ namespace
-cpp_namespace = "engine"
-
-# Objective-C Prefix
-objc_prefix = "engine"
-
-# Java Package Name
-java_package = "com.tirmat.ui.generated"
-
 ## Set the generation directories
 
 script_directory = cleanPath( os.path.dirname(os.path.abspath(__file__)) )
 
-# Set to the root of the engine
 generated_dir = script_directory + "/../generated"
+base_java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated/"
 
 # List of djinni files to generate from
 djinni_files = [ script_directory + '/../engine/state/GameInteractor.djinni' ]
-
-cpp_out = generated_dir + "/cpp"
-objc_out = generated_dir + "/objc"
-jni_out = generated_dir + "/jni"
-java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated"
 
 djinni_exec = "../../dependencies/djinni/src/run"
 
@@ -41,7 +25,7 @@ djinni_exec = "../../dependencies/djinni/src/run"
 # May want to optimize so that regeneration occurs only if the file has changed
 
 #subprocess.call(["rm", "-rf", generated_dir])
-#subprocess.call(["rm", "-rf", java_out])
+#subprocess.call(["rm", "-rf", base_java_out])
 
 ## Djinni generation
 
@@ -50,7 +34,38 @@ for djinni_file in djinni_files:
     if not file_exists:
         print("Djinni File " + djinni_file + " does not exist!")
         continue
+
+    namespace_list = []
+    file_postfix = djinni_file.split("/engine/")[1]
+    postfix_split = file_postfix.split("/")
+
+    # Don't include the filename obviously
+    for namespace in postfix_split[:-1]:
+        namespace_list.append(namespace)
+
+    # C++ namespace
+    cpp_namespace = "engine"
+
+    # Objective-C Prefix
+    objc_prefix = "engine"
+
+    # Java Package Name
+    java_package = "com.tirmat.ui.generated"
     
+    cpp_out = generated_dir + "/cpp/engine/"
+    objc_out = generated_dir + "/objc/engine/"
+    jni_out = generated_dir + "/jni/engine/"
+    java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated/engine/"
+
+    for namespace in namespace_list:
+        cpp_namespace += "::" + namespace
+        java_package += "." + namespace
+
+        cpp_out += namespace + "/"
+        objc_out += namespace + "/"
+        jni_out += namespace + "/"
+        java_out += namespace + "/"
+
     subprocess.call( [  
         "bash", djinni_exec,
         "--java-out", java_out,
@@ -59,8 +74,8 @@ for djinni_file in djinni_files:
         "--cpp-out", cpp_out,
         "--cpp-namespace", cpp_namespace,
         "--jni-out", jni_out,
-        "--ident-jni-class", "NativeFooBar",
-        "--ident-jni-file", "NativeFooBar",
+        "--ident-jni-class", "mFooBar",
+        "--ident-jni-file", "mFooBar",
         "--objc-out", objc_out,
         "--objcpp-out", objc_out,
         "--idl", djinni_file

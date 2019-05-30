@@ -23,7 +23,6 @@ SET(shapeset_src_files
 
 SET(state_src_files 
         "../state/UserStateContainer.cpp"
-        "../state/GameActionInteractor.cpp"
 )
 
 SET(move_src_files 
@@ -34,7 +33,7 @@ SET(move_src_files
 # Djinni compiles
 
 # The JNI files are the files directly interactable from Java
-file( GLOB jni_src_files
+file( GLOB_RECURSE jni_src_files
         "../../generated/jni/*.cpp"
         "../../generated/cpp/*.cpp")
 
@@ -66,12 +65,15 @@ set_target_properties(engine
         CXX_EXTENSIONS OFF
 )
 
+SET( generated_headers 
+        "../../generated/cpp/engine/state"
+        "../../generated/jni/engine/state")
+
 # All app specific includes are relative to the game-engine/ directory
 target_include_directories(engine
     PUBLIC
         "../../"
-        "../../generated/cpp/"
-        "../../generated/jni/"
+        ${generated_headers}
         "../../../dependencies/djinni/support-lib/"
         "../../../dependencies/djinni/support-lib/jni/"
 )
