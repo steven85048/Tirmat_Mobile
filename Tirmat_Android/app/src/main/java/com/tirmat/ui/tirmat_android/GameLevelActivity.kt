@@ -14,7 +14,7 @@ class GameLevelActivity : Activity() {
     companion object {
         // Loads the engine on startup
         init {
-            System.loadLibrary("game_engine")
+            System.loadLibrary("engine")
         }
     }
 }

@@ -17,9 +17,24 @@ generated_dir = script_directory + "/../generated"
 base_java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated/"
 
 # List of djinni files to generate from
-djinni_files = [ script_directory + '/../engine/state/GameInteractor.djinni' ]
+djinni_files = [ script_directory + '/../engine/state/GameInteractorBuild.djinni' ]
 
 djinni_exec = "../../dependencies/djinni/src/run"
+
+# C++ namespace
+cpp_namespace = "djinni"
+
+# Objective-C Prefix
+objc_prefix = "djinni"
+
+# Java Package Name
+java_package = "com.tirmat.ui.generated.djinni"
+
+cpp_out = generated_dir + "/cpp/djinni"
+objc_out = generated_dir + "/objc/djinni"
+jni_out = generated_dir + "/jni/djinni"
+java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated/djinni"
+
 
 ## Remove the current generated folder for regeneration
 # May want to optimize so that regeneration occurs only if the file has changed
@@ -34,37 +49,6 @@ for djinni_file in djinni_files:
     if not file_exists:
         print("Djinni File " + djinni_file + " does not exist!")
         continue
-
-    namespace_list = []
-    file_postfix = djinni_file.split("/engine/")[1]
-    postfix_split = file_postfix.split("/")
-
-    # Don't include the filename obviously
-    for namespace in postfix_split[:-1]:
-        namespace_list.append(namespace)
-
-    # C++ namespace
-    cpp_namespace = "engine"
-
-    # Objective-C Prefix
-    objc_prefix = "engine"
-
-    # Java Package Name
-    java_package = "com.tirmat.ui.generated"
-    
-    cpp_out = generated_dir + "/cpp/engine/"
-    objc_out = generated_dir + "/objc/engine/"
-    jni_out = generated_dir + "/jni/engine/"
-    java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirmat/ui/generated/engine/"
-
-    for namespace in namespace_list:
-        cpp_namespace += "::" + namespace
-        java_package += "." + namespace
-
-        cpp_out += namespace + "/"
-        objc_out += namespace + "/"
-        jni_out += namespace + "/"
-        java_out += namespace + "/"
 
     subprocess.call( [  
         "bash", djinni_exec,

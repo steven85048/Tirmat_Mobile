@@ -30,6 +30,11 @@ SET(move_src_files
         "../move/UndoController.cpp"
 )
 
+set( interactor_src_files
+        "../../engine/state/GameEngineFactory.cpp"
+        "../../engine/state/GameActionInteractor.cpp"
+)
+
 # Djinni compiles
 
 # The JNI files are the files directly interactable from Java
@@ -43,7 +48,8 @@ file( GLOB djinni_src_files
 
 # Define our library
 project(lib_engine VERSION 1.0 LANGUAGES CXX)
-add_library(engine SHARED ${board_src_files} 
+add_library(engine SHARED ${interactor_src_files}
+                          ${board_src_files} 
                           ${initialization_src_files} 
                           ${ruleset_src_files} 
                           ${shapeset_src_files}  
@@ -66,8 +72,10 @@ set_target_properties(engine
 )
 
 SET( generated_headers 
-        "../../generated/cpp/engine/state"
-        "../../generated/jni/engine/state")
+        "../../generated/cpp"
+        "../../generated/jni"
+        "../../generated/cpp/djinni"
+        "../../generated/jni/djinni" )
 
 # All app specific includes are relative to the game-engine/ directory
 target_include_directories(engine

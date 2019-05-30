@@ -1,0 +1,22 @@
+@import "../board/BoardBuild.djinni"
+
+# UI -> Engine communication (tells engine to do things)
+GameInteractorIntf = interface +c {
+    AddResource( aIndexX : i32, aIndexY : i32, aResourceType : ResourceType );
+    RemoveResource( aIndexX : i32, aIndexY : i32 );
+}
+
+# Engine -> UI communication of state
+GameStateListenerIntf = interface +j +o {
+}
+
+# Entry point of the engine; provides the engine dependencies
+GameEngineFactoryIntf = interface +c {
+    static Create(): GameEngineFactoryIntf;
+
+    # Adds another listener that can receive events from the engine
+    AddEngineStateListener( aListener : GameStateListenerIntf );
+
+    # Retrieve the object that can be used to interact with the engine
+    GetGameInteractor(): GameInteractorIntf;
+}
