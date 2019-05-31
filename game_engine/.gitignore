@@ -1,0 +1,12 @@
+# Ignore all build directories EXCEPT for the CMakeLists.txt
+engine/build/*
+!engine/build/CMakeLists.txt
+
+engine/board/build/*
+!engine/board/build/CMakeLists.txt
+
+build/*
+!build/CMakeLists.txt
+!build/run_djinni.py
+
+generated/*

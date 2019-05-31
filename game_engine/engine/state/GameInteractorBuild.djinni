@@ -6,8 +6,14 @@ GameInteractorIntf = interface +c {
     RemoveResource( aIndexX : i32, aIndexY : i32 );
 }
 
+GameEngineState = record {
+    IsDirty: bool;
+    Board: list< list< ResourceType > >;
+}
+
 # Engine -> UI communication of state
 GameStateListenerIntf = interface +j +o {
+    GetState(): GameEngineState;
 }
 
 # Entry point of the engine; provides the engine dependencies

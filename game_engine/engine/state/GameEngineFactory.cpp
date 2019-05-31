@@ -3,7 +3,7 @@
 #include "djinni/GameEngineFactoryIntf.hpp"
 
 std::shared_ptr< djinni::GameEngineFactoryIntf > djinni::GameEngineFactoryIntf::Create() {
-    return std::shared_ptr< engine::state::GameEngineFactory_t >();
+    return std::make_shared< engine::state::GameEngineFactory_t >();
 }
 
 engine::state::GameEngineFactory_t::GameEngineFactory_t() {
