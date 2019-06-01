@@ -1,5 +1,6 @@
 #pragma once
 
+#include "djinni/ResourceType.hpp"
 #include "engine/board/Types.hpp"
 #include "engine/ruleset/RuleDFA.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
@@ -18,12 +19,12 @@ class UserResources_t
 public: // FUNCTIONS
 // --------------------------------------------------------
 
-UserResources_t( std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > aResources );
+UserResources_t( std::shared_ptr< std::unordered_map< djinni::ResourceType, int > > aResources );
     
 // Assumes that ValidateResources() is called before this
-void UpdateResources( std::unordered_map< engine::board::ResourceType_t, int >& aResources );
+void UpdateResources( std::unordered_map< djinni::ResourceType, int >& aResources );
 
-bool ValidateResources( std::unordered_map< engine::board::ResourceType_t, int >& aResources );
+bool ValidateResources( std::unordered_map< djinni::ResourceType, int >& aResources );
 
 // --------------------------------------------------------
 private: // FUNCTIONS
@@ -33,7 +34,7 @@ private: // FUNCTIONS
 private: // DATA
 // --------------------------------------------------------
 
-std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > mResources;
+std::shared_ptr< std::unordered_map< djinni::ResourceType, int > > mResources;
 
 };
 

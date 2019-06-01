@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+#include "djinni/ResourceType.hpp"
+#include "djinni/BoardCellState.hpp"
 #include "engine/board/GameBoard.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 #include "engine/board/Types.hpp"
@@ -11,6 +13,7 @@
 #include "engine/state/UserStateContainer.hpp"
 #include "engine/move/MoveManager.hpp"
 #include "engine/board/UserResources.hpp"
+#include "engine/board/BoardElementsFactory.hpp"
 
 engine::initialization::GameInteractorContainer engine::initialization::GameBoardFactory_t::InitializeDefault() {
 
@@ -18,8 +21,8 @@ engine::initialization::GameInteractorContainer engine::initialization::GameBoar
 
     // Shared state variables
     auto theBoard = std::make_shared< engine::board::GameBoard_t >( 7, 6 ); 
-    auto theResourcesMap = std::make_shared< std::unordered_map< engine::board::ResourceType_t, int > >();
-    auto theGeneratingLocations = std::make_shared< std::vector< engine::board::BoardCellState_t > >();
+    auto theResourcesMap = std::make_shared< std::unordered_map< djinni::ResourceType, int > >();
+    auto theGeneratingLocations = std::make_shared< std::vector< djinni::BoardCellState > >();
 
     // transfer ownership
     auto theGameStateContainer = std::make_shared< engine::state::UserStateContainer_t >( theBoard, theResourcesMap, theGeneratingLocations );
@@ -33,14 +36,14 @@ engine::initialization::GameInteractorContainer engine::initialization::GameBoar
 
     engine::ruleset::Rule_t theRule;
 
-    auto point1 = std::make_shared< engine::board::BoardCellState_t >(0,0);
-    point1->Resource = engine::board::ResourceType_t::L1;
+    auto point1 = engine::board::BoardElementsFactory_t::CreateCellState(0,0);
+    point1->Resource = djinni::ResourceType::L1;
 
-    auto point2 = std::make_shared< engine::board::BoardCellState_t >(1,0);
-    point2->Resource = engine::board::ResourceType_t::L2;
+    auto point2 = engine::board::BoardElementsFactory_t::CreateCellState(1,0);
+    point2->Resource = djinni::ResourceType::L2;
 
-    auto point3 = std::make_shared< engine::board::BoardCellState_t >(1,1);
-    point3->Resource = engine::board::ResourceType_t::L3;
+    auto point3 = engine::board::BoardElementsFactory_t::CreateCellState(1,1);
+    point3->Resource = djinni::ResourceType::L3;
 
     theRule.RulePoints.push_back(point1);
     theRule.RulePoints.push_back(point2);
@@ -52,9 +55,9 @@ engine::initialization::GameInteractorContainer engine::initialization::GameBoar
     // User Resources init
     auto theUserResources = std::make_unique< engine::board::UserResources_t >( theResourcesMap );
 
-    std::unordered_map< engine::board::ResourceType_t, int > theResources;
-    theResources[ engine::board::ResourceType_t::L1 ] = 5;
-    theResources[ engine::board::ResourceType_t::L2 ] = 5;
+    std::unordered_map< djinni::ResourceType, int > theResources;
+    theResources[ djinni::ResourceType::L1 ] = 5;
+    theResources[ djinni::ResourceType::L2 ] = 5;
 
     theUserResources->UpdateResources(theResources);
 

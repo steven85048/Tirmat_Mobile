@@ -3,8 +3,12 @@
 
 #include "GameBoard.hpp"
 
+#include "djinni/MoveResult.hpp"
+#include "djinni/BoardCellState.hpp"
+#include "djinni/ResourceType.hpp"
 #include "engine/board/Types.hpp"
 #include "engine/utilities/Logging.hpp"
+#include "engine/board/BoardElementsFactory.hpp"
 
 engine::board::GameBoard_t::GameBoard_t( std::size_t aBoardSizeX, std::size_t aBoardSizeY )
 :
@@ -22,7 +26,7 @@ engine::board::GameBoard_t::BoardArray2D_t engine::board::GameBoard_t::AllocateB
         BoardArray1D_t theColumn{};
 
         for( int j = 0 ; j < mBoardHeight; j++ ) {
-            auto theCell = std::make_shared< engine::board::BoardCellState_t >( i, j );
+            auto theCell = engine::board::BoardElementsFactory_t::CreateCellState( i, j );
             theColumn.push_back( theCell );
         }
 
@@ -32,7 +36,7 @@ engine::board::GameBoard_t::BoardArray2D_t engine::board::GameBoard_t::AllocateB
     return theBoard;
 }
 
-std::shared_ptr< engine::board::BoardCellState_t > engine::board::GameBoard_t::GetCellState( int xPos, int yPos ) const {    
+std::shared_ptr< djinni::BoardCellState > engine::board::GameBoard_t::GetCellState( int xPos, int yPos ) const {    
     if(!IsValidPosition( xPos, yPos ) ) {
         return nullptr;
     }
@@ -48,7 +52,7 @@ bool engine::board::GameBoard_t::RunMoves( std::vector< engine::board::GameBoard
 
 
         // We just don't run this batch of moves if one or more of them is successful
-        if( theMoveResult != engine::board::MoveResult_t::SUCCESS ) {
+        if( theMoveResult != djinni::MoveResult::SUCCESS ) {
             std::cout << "Game Board Move ERROR: " << engine::utilities::EnumStrings_t::MoveResultToString( theMoveResult ) << std::endl;
             return false;
         }
@@ -62,7 +66,7 @@ bool engine::board::GameBoard_t::RunMoves( std::vector< engine::board::GameBoard
     return true;
 }
 
-engine::board::MoveResult_t engine::board::GameBoard_t::VerifyMove( engine::board::GameBoardMove_t& aMove ) {
+djinni::MoveResult engine::board::GameBoard_t::VerifyMove( engine::board::GameBoardMove_t& aMove ) {
     auto moveX = aMove.MoveIndexX;
     auto moveY = aMove.MoveIndexY;
 
@@ -70,27 +74,27 @@ engine::board::MoveResult_t engine::board::GameBoard_t::VerifyMove( engine::boar
     // Pretty low priority; shouldn't happen
 
     if( !IsValidPosition( moveX, moveY ) ){
-        return engine::board::MoveResult_t::OUTOFBOUNDS;
+        return djinni::MoveResult::OUTOFBOUNDS;
     }
 
     if( mBoard[ moveX ][ moveY ]->Locked ) {
-        return engine::board::MoveResult_t::LOCKED;
+        return djinni::MoveResult::LOCKED;
     }
 
     // Add specific checks
     if( aMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
         // To add a tile, the resource in the move must be set
         if( !aMove.Resource ) {
-            return engine::board::MoveResult_t::RESOURCEUNSET;
+            return djinni::MoveResult::RESOURCEUNSET;
         }        
     }
     else if( aMove.MoveType == engine::board::MoveType_t::REMOVERESOURCE ) {
-        if( mBoard[moveX][moveY]->Resource == engine::board::ResourceType_t::EMPTY ) {
-            return engine::board::MoveResult_t::DELETEFROMEMPTY;
+        if( mBoard[moveX][moveY]->Resource == djinni::ResourceType::EMPTY ) {
+            return djinni::MoveResult::DELETEFROMEMPTY;
         }
     }
 
-    return engine::board::MoveResult_t::SUCCESS;
+    return djinni::MoveResult::SUCCESS;
 }
 
 void engine::board::GameBoard_t::RunMove( engine::board::GameBoardMove_t& aMove ) {
@@ -107,7 +111,7 @@ void engine::board::GameBoard_t::RunMove( engine::board::GameBoardMove_t& aMove 
 }
 
 void engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t& aMove  ) {
-    if( aMove.MoveResult != engine::board::MoveResult_t::SUCCESS ) {
+    if( aMove.MoveResult != djinni::MoveResult::SUCCESS ) {
         return;
     }
 
@@ -116,12 +120,12 @@ void engine::board::GameBoard_t::AddResource( engine::board::GameBoardMove_t& aM
 }
 
 void engine::board::GameBoard_t::RemoveResource( engine::board::GameBoardMove_t& aMove ) {
-    if( aMove.MoveResult != engine::board::MoveResult_t::SUCCESS ) {
+    if( aMove.MoveResult != djinni::MoveResult::SUCCESS ) {
         return;
     }
     
     aMove.PreviousResource = mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexX ]->Resource;
-    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ]->Resource = ResourceType_t::EMPTY;
+    mBoard[ aMove.MoveIndexX ][ aMove.MoveIndexY ]->Resource = djinni::ResourceType::EMPTY;
 }
 
 bool engine::board::GameBoard_t::IsValidPosition( int moveX, int moveY ) const {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+#include "djinni/ResourceType.hpp"
 #include "engine/board/GameBoard.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 #include "engine/board/Types.hpp"
@@ -14,28 +15,28 @@ int main()
     auto theShapeSetManager = std::make_shared< engine::shapeset::ShapeSetManager_t >( theBoard );
 
     engine::board::GameBoardMove_t move1( engine::board::MoveType_t::ADDRESOURCE, 0, 0 );
-    move1.Resource = engine::board::ResourceType_t::L1;
+    move1.Resource = djinni::ResourceType::L1;
     
     engine::board::GameBoardMove_t move2( engine::board::MoveType_t::ADDRESOURCE, 1, 0 );
-    move2.Resource = engine::board::ResourceType_t::L2;
+    move2.Resource = djinni::ResourceType::L2;
 
     engine::board::GameBoardMove_t move3( engine::board::MoveType_t::ADDRESOURCE, 2, 0 );
-    move3.Resource = engine::board::ResourceType_t::L3;
+    move3.Resource = djinni::ResourceType::L3;
 
     engine::board::GameBoardMove_t move4( engine::board::MoveType_t::ADDRESOURCE, 0, 2 );
-    move4.Resource = engine::board::ResourceType_t::L1;
+    move4.Resource = djinni::ResourceType::L1;
     
     engine::board::GameBoardMove_t move5( engine::board::MoveType_t::ADDRESOURCE, 1, 2 );
-    move5.Resource = engine::board::ResourceType_t::L2;
+    move5.Resource = djinni::ResourceType::L2;
 
     engine::board::GameBoardMove_t move6( engine::board::MoveType_t::ADDRESOURCE, 2, 2 );
-    move6.Resource = engine::board::ResourceType_t::L3;
+    move6.Resource = djinni::ResourceType::L3;
 
     engine::board::GameBoardMove_t move7( engine::board::MoveType_t::ADDRESOURCE, 2, 1 );
-    move7.Resource = engine::board::ResourceType_t::L6;
+    move7.Resource = djinni::ResourceType::L6;
 
     engine::board::GameBoardMove_t move9( engine::board::MoveType_t::ADDRESOURCE, 1, 1 );
-    move9.Resource = engine::board::ResourceType_t::L6;
+    move9.Resource = djinni::ResourceType::L6;
 
     engine::board::GameBoardMove_t move8( engine::board::MoveType_t::REMOVERESOURCE, 2, 1 );
 

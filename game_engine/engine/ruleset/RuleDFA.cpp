@@ -4,10 +4,11 @@
 #include <memory>
 #include <map>
 
+#include "djinni/BoardCellState.hpp"
 #include "engine/ruleset/RuleDFA.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 
-engine::ruleset::RuleDFA_t::RuleDFA_t( std::shared_ptr< std::vector< engine::board::BoardCellState_t > > aGeneratingLocations )
+engine::ruleset::RuleDFA_t::RuleDFA_t( std::shared_ptr< std::vector< djinni::BoardCellState > > aGeneratingLocations )
 :
 mDFAStartNode( std::make_shared< engine::ruleset::DFANode_t >() ),
 mGeneratingLocations( std::move( aGeneratingLocations ) )
@@ -32,9 +33,12 @@ void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< eng
             // For each point, we create the new point with the absolute location
             // Corner + generating point(x,y)
             for( auto& thePoint : theShapeGeneratingPoints ) {
-                engine::board::BoardCellState_t theGeneratingState( theShapeCorner.xPos + thePoint->Location.xPos, theShapeCorner.yPos + thePoint->Location.yPos );
-                theGeneratingState.Resource = thePoint->Resource;
-                theGeneratingState.Locked = thePoint->Locked;
+                djinni::PointLocation theGeneratingLocation( theShapeCorner.xPos + thePoint->Location.xPos,
+                                                             theShapeCorner.yPos + thePoint->Location.yPos );
+
+                djinni::BoardCellState theGeneratingState( theGeneratingLocation,
+                                                           thePoint->Resource,
+                                                           thePoint->Locked );
 
                 // TODO: Assumes there are no duplicate generating locations for now; we may want to add
                 // the values in the case of duplicates
@@ -45,7 +49,7 @@ void engine::ruleset::RuleDFA_t::PointSetsUpdated( const std::unordered_set< eng
     }
 }
 
-engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aShapePoints ) {
+engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughDFA( const std::vector< std::shared_ptr< djinni::BoardCellState > >& aShapePoints ) {
     
     auto theCurrentState = mDFAStartNode;
 
@@ -59,7 +63,7 @@ engine::ruleset::DFAPassResponse_t engine::ruleset::RuleDFA_t::PassShapeThroughD
 
     for( auto& theInputCharacter : theInputString ) {
 
-        std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
+        std::pair< LanguageDirection_t, djinni::ResourceType > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
         if( theCurrentState->Transition.find( inputCharacterPair ) == theCurrentState->Transition.end() ) {
             theResponse.ResponseType = engine::ruleset::DFAResponseType_t::NOMATCH;
             return theResponse;
@@ -92,7 +96,7 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
     for( auto& theInputCharacter : theInputString ) {
 
         // Using structs as keys are annoying, so we just use a pair
-        std::pair< LanguageDirection_t, engine::board::ResourceType_t > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
+        std::pair< LanguageDirection_t, djinni::ResourceType > inputCharacterPair = { theInputCharacter.Direction, theInputCharacter.Resource };
 
         // Similar to Trie! We continue the tree traversal if the transition exists, and create a new node if it doesn't
         if( theCurrentState->Transition.find( inputCharacterPair ) == theCurrentState->Transition.end() ) {
@@ -112,7 +116,7 @@ void engine::ruleset::RuleDFA_t::AddRuleToDFA( const engine::ruleset::Rule_t& aR
     theCurrentState->Generating = aRule.GeneratePoints;
 }
 
-std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints, 
+std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDFA_t::ConvertPointsToLanguage( const std::vector< std::shared_ptr< djinni::BoardCellState > >& aRulePoints, 
                                                                                                               const engine::ruleset::PointBounds_t& aPointBounds ) {
     
     #ifdef LOG_RULE_DFA
@@ -126,7 +130,7 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
         return inputString;
     }
     
-    std::map< std::pair< int, int >, engine::board::ResourceType_t > pointLocationToResourceMap {};
+    std::map< std::pair< int, int >, djinni::ResourceType > pointLocationToResourceMap {};
     for( auto& point : aRulePoints ) {
         pointLocationToResourceMap[{ point->Location.xPos, point->Location.yPos }] = point->Resource;
     }
@@ -150,9 +154,9 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
                         ( pointLocationToResourceMap.find({i, j+1}) != pointLocationToResourceMap.end() ) ||
                         ( pointLocationToResourceMap.find({i-1, j}) != pointLocationToResourceMap.end() ) ||
                         ( pointLocationToResourceMap.find({i, j-1}) != pointLocationToResourceMap.end() ) ) {
-                newCharacter.Resource = engine::board::ResourceType_t::EMPTY;
+                newCharacter.Resource = djinni::ResourceType::EMPTY;
             } else {
-                newCharacter.Resource = engine::board::ResourceType_t::IGNORE;
+                newCharacter.Resource = djinni::ResourceType::IGNORE;
             }
 
             direction = engine::ruleset::LanguageDirection_t::SOUTH;
@@ -164,7 +168,7 @@ std::vector< engine::ruleset::LanguageInputCharacter_t > engine::ruleset::RuleDF
     return inputString;
 }
 
-engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< std::shared_ptr< engine::board::BoardCellState_t > >& aRulePoints ) {
+engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( const std::vector< std::shared_ptr< djinni::BoardCellState > >& aRulePoints ) {
 
     engine::ruleset::PointBounds_t theBounds {};
 
@@ -197,7 +201,7 @@ engine::ruleset::PointBounds_t engine::ruleset::RuleDFA_t::GetBoundsFromPoints( 
         hasSetCorner = true;
     }
 
-    theBounds.LeftTopCorner = engine::board::PointLocation_t{ xLowCorner, yLowCorner };
+    theBounds.LeftTopCorner = djinni::PointLocation{ xLowCorner, yLowCorner };
     theBounds.recWidth = xHighCorner - xLowCorner;
     theBounds.recHeight = yHighCorner - yLowCorner;
 

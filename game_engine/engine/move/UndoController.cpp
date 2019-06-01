@@ -31,10 +31,10 @@ void engine::move::UndoController_t::AddUndoMoveBatch( const engine::board::Game
 
 engine::board::GameBoardMove_t engine::move::UndoController_t::CreateEquivalentUndo( const engine::board::GameBoardMove_t& aPreviousMove ) {
     engine::board::MoveType_t theUndoMoveType;
-    engine::board::ResourceType_t theUndoResourceType = engine::board::ResourceType_t::EMPTY;
+    djinni::ResourceType theUndoResourceType = djinni::ResourceType::EMPTY;
     
     if( aPreviousMove.MoveType == engine::board::MoveType_t::ADDRESOURCE ) {
-        if( aPreviousMove.PreviousResource.has_value() && *aPreviousMove.PreviousResource == engine::board::ResourceType_t::EMPTY ) {
+        if( aPreviousMove.PreviousResource.has_value() && *aPreviousMove.PreviousResource == djinni::ResourceType::EMPTY ) {
             theUndoMoveType = engine::board::MoveType_t::REMOVERESOURCE;
         } else {
             // This was just an update to an existing colored cell

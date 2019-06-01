@@ -1,3 +1,4 @@
+#include "djinni/ResourceType.hpp"
 #include "engine/board/Types.hpp"
 #include "engine/state/GameActionInteractor.hpp"
 
@@ -10,7 +11,7 @@ mMoveManager( std::move( aMoveManager ) )
 void engine::state::GameActionInteractor_t::AddResource(int32_t aIndexX, int32_t aIndexY, djinni::ResourceType aResourceType) {
     engine::board::GameBoardMoveBatch_t theMoveBatch;
 
-    engine::board::GameBoardMove_t theMove( engine::board::MoveType_t::ADDRESOURCE, aIndexX, aIndexY, engine::board::ResourceType_t::L1 );
+    engine::board::GameBoardMove_t theMove( engine::board::MoveType_t::ADDRESOURCE, aIndexX, aIndexY, aResourceType );
     theMoveBatch.Moves.push_back( theMove );
 
     mMoveManager->ExecuteMoves( theMoveBatch );

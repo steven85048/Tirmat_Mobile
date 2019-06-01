@@ -39,8 +39,8 @@ java_out = script_directory + "/../../Tirmat_Android/app/src/main/java/com/tirma
 ## Remove the current generated folder for regeneration
 # May want to optimize so that regeneration occurs only if the file has changed
 
-subprocess.call(["rm", "-rf", generated_dir])
-subprocess.call(["rm", "-rf", base_java_out])
+#subprocess.call(["rm", "-rf", generated_dir])
+#subprocess.call(["rm", "-rf", base_java_out])
 
 ## Djinni generation
 

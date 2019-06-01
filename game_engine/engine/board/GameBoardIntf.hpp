@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 
+#include "djinni/BoardCellState.hpp"
 #include "engine/board/Types.hpp"
 
 namespace engine
@@ -19,7 +20,7 @@ public: // FUNCTIONS
 // --------------------------------------------------------
     
     virtual bool RunMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) = 0;    
-    virtual std::shared_ptr< engine::board::BoardCellState_t > GetCellState( int xPos, int yPos ) const = 0;
+    virtual std::shared_ptr< djinni::BoardCellState > GetCellState( int xPos, int yPos ) const = 0;
 };
 
 } // ENDOF board

@@ -39,8 +39,8 @@ set( interactor_src_files
 
 # The JNI files are the files directly interactable from Java
 file( GLOB_RECURSE jni_src_files
-        "../../generated/jni/*.cpp"
-        "../../generated/cpp/*.cpp")
+        "../../generated/jni/djinni/*.cpp"
+        "../../generated/cpp/djinni/*.cpp")
 
 # Djinni has some files we need to compile; just glob them
 file( GLOB djinni_src_files

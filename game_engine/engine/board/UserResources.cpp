@@ -2,13 +2,13 @@
 
 #include "engine/board/UserResources.hpp"
 
-engine::board::UserResources_t::UserResources_t( std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > aResources )
+engine::board::UserResources_t::UserResources_t( std::shared_ptr< std::unordered_map< djinni::ResourceType, int > > aResources )
 :
 mResources( std::move( aResources ) )
 {
 }
     
-void engine::board::UserResources_t::UpdateResources( std::unordered_map< engine::board::ResourceType_t, int >& aResources ) {
+void engine::board::UserResources_t::UpdateResources( std::unordered_map< djinni::ResourceType, int >& aResources ) {
     if( !mResources ) {
         return;
     }
@@ -21,7 +21,7 @@ void engine::board::UserResources_t::UpdateResources( std::unordered_map< engine
     }
 }
 
-bool engine::board::UserResources_t::ValidateResources( std::unordered_map< engine::board::ResourceType_t, int >& aResources ) {
+bool engine::board::UserResources_t::ValidateResources( std::unordered_map< djinni::ResourceType, int >& aResources ) {
     
     if( !mResources ) {
         return false;

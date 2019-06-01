@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "djinni/ResourceType.hpp"
+#include "djinni/BoardCellState.hpp"
 #include "engine/board/GameBoard.hpp"
 #include "engine/board/Types.hpp"
 
@@ -22,8 +24,8 @@ public: // FUNCTIONS
 // --------------------------------------------------------
 
 UserStateContainer_t( std::shared_ptr< engine::board::GameBoard_t > aGameBoard,
-                      std::shared_ptr< std::unordered_map< engine::board::ResourceType_t, int > > aUserResources,
-                      std::shared_ptr< std::vector< engine::board::BoardCellState_t > > aGeneratingLocations );
+                      std::shared_ptr< std::unordered_map< djinni::ResourceType, int > > aUserResources,
+                      std::shared_ptr< std::vector< djinni::BoardCellState > > aGeneratingLocations );
 
 void PrintState();
 
@@ -37,8 +39,8 @@ private: // DATA
 // --------------------------------------------------------
 
 std::shared_ptr< const engine::board::GameBoard_t > mGameBoard;
-std::shared_ptr< const std::unordered_map< engine::board::ResourceType_t, int > > mUserResources;
-std::shared_ptr< const std::vector< engine::board::BoardCellState_t > > mGeneratingLocations;
+std::shared_ptr< const std::unordered_map< djinni::ResourceType, int > > mUserResources;
+std::shared_ptr< const std::vector< djinni::BoardCellState > > mGeneratingLocations;
 
 };
 

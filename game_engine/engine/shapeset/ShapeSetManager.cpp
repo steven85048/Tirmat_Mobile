@@ -3,6 +3,8 @@
 #include <unordered_set>
 #include <iostream>
 
+#include "djinni/PointLocation.hpp"
+#include "djinni/BoardCellState.hpp"
 #include "engine/shapeset/ShapeSetManager.hpp"
 #include "engine/board/GameBoardIntf.hpp"
 #include "engine/board/Types.hpp"
@@ -114,7 +116,7 @@ engine::shapeset::ShapeSetManager_t::PointSet_t engine::shapeset::ShapeSetManage
     }
 
     // Create a new set that we will put all the neighboring points into
-    auto concatSet = std::make_shared< std::vector< std::shared_ptr< engine::board::BoardCellState_t > > >();
+    auto concatSet = std::make_shared< std::vector< std::shared_ptr< djinni::BoardCellState > > >();
 
     for( auto& theSet : pointSet ) {
         if( theSet ) {
@@ -129,10 +131,10 @@ engine::shapeset::ShapeSetManager_t::PointSet_t engine::shapeset::ShapeSetManage
     return concatSet;
 }
 
-std::vector< engine::board::PointLocation_t > engine::shapeset::ShapeSetManager_t::GetValidNeighbors( int xPos, int yPos ) {
+std::vector< djinni::PointLocation > engine::shapeset::ShapeSetManager_t::GetValidNeighbors( int xPos, int yPos ) {
     int theDirections[4][2] = {{0, 1},{1,0},{-1,0},{0,-1}};
 
-    std::vector< engine::board::PointLocation_t > theNeighbors;
+    std::vector< djinni::PointLocation > theNeighbors;
 
     for( auto& theDirection : theDirections ) {
         auto xNeighborPos = xPos + theDirection[0];
@@ -140,10 +142,7 @@ std::vector< engine::board::PointLocation_t > engine::shapeset::ShapeSetManager_
 
         auto theCellState = mGameBoard->GetCellState( xNeighborPos, yNeighborPos );
         if( theCellState ) {
-            engine::board::PointLocation_t newPoint{};
-            newPoint.xPos = xNeighborPos;
-            newPoint.yPos = yNeighborPos;
-
+            djinni::PointLocation newPoint{ xNeighborPos, yNeighborPos };
             theNeighbors.push_back( newPoint );
         }
     }

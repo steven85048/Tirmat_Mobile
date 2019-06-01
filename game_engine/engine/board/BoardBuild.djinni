@@ -11,3 +11,28 @@ ResourceType = enum {
     L6;
     L7;
 }
+
+MoveResult = enum {
+    SUCCESS;
+    OUTOFBOUNDS;
+    LOCKED;
+    RESOURCEUNSET;
+    DELETEFROMEMPTY;
+    MOVEUNCHECKED;
+}
+
+PointLocation = record {
+    xPos : i32;
+    yPos : i32;
+} deriving (eq)
+
+BoardCellState = record {
+    Location : PointLocation;
+    Resource : ResourceType;
+    Locked : bool;
+} deriving (eq)
+
+GameEngineState = record {
+    IsDirty: bool;
+    Board: list< list< ResourceType > >;
+}

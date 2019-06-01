@@ -1,5 +1,6 @@
 #include "engine/board/GameBoard.hpp"
 #include "engine/board/Types.hpp"
+#include "djinni/ResourceType.hpp"
 #include <iostream>
 
 // Testing suite for GameBoard functionality
@@ -13,9 +14,9 @@ int main()
     engine::board::GameBoardMove_t move2( engine::board::MoveType_t::ADDRESOURCE, 1, 1 );
     engine::board::GameBoardMove_t move4( engine::board::MoveType_t::ADDRESOURCE, 25, 25 );
 
-    move1.Resource = engine::board::ResourceType_t::L1;
-    move2.Resource = engine::board::ResourceType_t::L3;
-    move4.Resource = engine::board::ResourceType_t::L5;
+    move1.Resource = djinni::ResourceType::L1;
+    move2.Resource = djinni::ResourceType::L3;
+    move4.Resource = djinni::ResourceType::L5;
 
     std::vector< engine::board::GameBoardMove_t > theMoves;
     theMoves.push_back(move1);

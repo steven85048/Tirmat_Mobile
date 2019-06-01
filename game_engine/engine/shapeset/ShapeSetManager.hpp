@@ -23,7 +23,7 @@ class ShapeSetManager_t
 public: // TYPES
 // --------------------------------------------------------
 
-using PointSet_t = std::shared_ptr< std::vector< std::shared_ptr< engine::board::BoardCellState_t > > >;
+using PointSet_t = std::shared_ptr< std::vector< std::shared_ptr< djinni::BoardCellState > > >;
 
 // --------------------------------------------------------
 public: // FUNCTIONS
@@ -44,7 +44,7 @@ void RemoveResource( int xPos, int yPos );
 // Also removes all neighbor sets from mPointSets; assumes that these will be readded as part of the
 // add and remove operations
 PointSet_t GetNeighborSets( int xPos, int yPos );
-std::vector< engine::board::PointLocation_t > GetValidNeighbors( int xPos, int yPos );
+std::vector< djinni::PointLocation > GetValidNeighbors( int xPos, int yPos );
 
 // --------------------------------------------------------
 private: // DATA
