@@ -48,15 +48,15 @@ file( GLOB djinni_src_files
 
 # Define our library
 project(lib_engine VERSION 1.0 LANGUAGES CXX)
-add_library(engine SHARED ${interactor_src_files}
+add_library(engine SHARED ${djinni_src_files} 
+                          ${interactor_src_files}
                           ${board_src_files} 
                           ${initialization_src_files} 
                           ${ruleset_src_files} 
                           ${shapeset_src_files}  
                           ${state_src_files}
                           ${move_src_files}
-                          ${jni_src_files}
-                          ${djinni_src_files} )
+                          ${jni_src_files} )
 
 # Set library compilation features
 target_compile_features(engine

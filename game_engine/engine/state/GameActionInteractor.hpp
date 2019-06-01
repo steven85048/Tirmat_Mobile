@@ -1,8 +1,10 @@
 #pragma once
 
 #include "djinni/GameInteractorIntf.hpp"
+#include "djinni/GameStateListenerIntf.hpp"
 #include "djinni/ResourceType.hpp"
 #include "engine/move/MoveManager.hpp"
+#include "engine/state/UserStateContainer.hpp"
 
 namespace engine
 {
@@ -19,7 +21,10 @@ class GameActionInteractor_t : public djinni::GameInteractorIntf
 public: // FUNCTIONS
 // --------------------------------------------------------
 
-GameActionInteractor_t( std::shared_ptr< engine::move::MoveManager_t > aMoveManager );
+GameActionInteractor_t( std::shared_ptr< engine::move::MoveManager_t > aMoveManager, 
+                        std::shared_ptr< engine::state::UserStateContainer_t > aUserStateContainer );
+
+void AddObserver( const std::shared_ptr< djinni::GameStateListenerIntf >& aStateListener );
 
 // --------------------------------------------------------
 public: // GameInteractor OVERRIDES
@@ -33,6 +38,9 @@ private: // DATA
 // --------------------------------------------------------
 
 std::shared_ptr< engine::move::MoveManager_t > mMoveManager;
+std::shared_ptr< engine::state::UserStateContainer_t > mUserStateContainer;
+std::shared_ptr< djinni::GameStateListenerIntf > mStateListener;
+ 
 
 };
 

@@ -13,6 +13,11 @@ mGeneratingLocations( std::move(aGeneratingLocations) )
 {
 }
 
+djinni::GameEngineState engine::state::UserStateContainer_t::GetState() {
+    djinni::GameEngineState theUpdatedState( true, mGameBoard->CloneBoardDereferenced() );
+    return theUpdatedState;
+}
+
 void engine::state::UserStateContainer_t::PrintState() {
 
     mGameBoard->PrintBoard();

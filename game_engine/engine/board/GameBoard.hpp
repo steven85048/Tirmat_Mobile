@@ -41,6 +41,7 @@ public: // GameBoardIntf_t overrides
 bool RunMoves( std::vector< engine::board::GameBoardMove_t >& aMoves ) override;
 
 std::shared_ptr< djinni::BoardCellState > GetCellState( int xPos, int yPos ) const override;
+std::vector<std::vector<djinni::BoardCellState>> CloneBoardDereferenced() const override;
 
 // For Testing
 void PrintBoard() const;

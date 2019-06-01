@@ -2,10 +2,16 @@
 #include "engine/board/Types.hpp"
 #include "engine/state/GameActionInteractor.hpp"
 
-engine::state::GameActionInteractor_t::GameActionInteractor_t( std::shared_ptr< engine::move::MoveManager_t > aMoveManager ) 
+engine::state::GameActionInteractor_t::GameActionInteractor_t( std::shared_ptr< engine::move::MoveManager_t > aMoveManager,
+                                                               std::shared_ptr< engine::state::UserStateContainer_t > aUserStateContainer)
 :
-mMoveManager( std::move( aMoveManager ) )
+mMoveManager( std::move( aMoveManager ) ),
+mUserStateContainer( std::move( aUserStateContainer ) )
 {
+}
+
+void engine::state::GameActionInteractor_t::AddObserver( const std::shared_ptr< djinni::GameStateListenerIntf >& aStateListener ) {
+    mStateListener = aStateListener;
 }
 
 void engine::state::GameActionInteractor_t::AddResource(int32_t aIndexX, int32_t aIndexY, djinni::ResourceType aResourceType) {
@@ -15,6 +21,10 @@ void engine::state::GameActionInteractor_t::AddResource(int32_t aIndexX, int32_t
     theMoveBatch.Moves.push_back( theMove );
 
     mMoveManager->ExecuteMoves( theMoveBatch );
+
+    if( mStateListener != nullptr && mUserStateContainer != nullptr ) {
+        mStateListener->GetState( mUserStateContainer->GetState() );
+    }
 }
 
 void engine::state::GameActionInteractor_t::RemoveResource(int32_t aIndexX, int32_t aIndexY) {
@@ -24,4 +34,8 @@ void engine::state::GameActionInteractor_t::RemoveResource(int32_t aIndexX, int3
     theMoveBatch.Moves.push_back( theMove );
 
     mMoveManager->ExecuteMoves( theMoveBatch );
+
+    if( mStateListener != nullptr && mUserStateContainer != nullptr ) {
+        mStateListener->GetState( mUserStateContainer->GetState() );
+    }
 }

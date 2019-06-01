@@ -36,6 +36,22 @@ engine::board::GameBoard_t::BoardArray2D_t engine::board::GameBoard_t::AllocateB
     return theBoard;
 }
 
+std::vector<std::vector<djinni::BoardCellState>> engine::board::GameBoard_t::CloneBoardDereferenced() const {
+    std::vector<std::vector<djinni::BoardCellState>> theBoardClone;
+
+    for( auto theBoardCol : mBoard ) {
+        std::vector<djinni::BoardCellState> theCloneCol;
+
+        for( auto theBoardCell : theBoardCol ) {
+            theCloneCol.push_back( *theBoardCell );
+        }
+
+        theBoardClone.push_back(theCloneCol);
+    }
+
+    return theBoardClone;
+}
+
 std::shared_ptr< djinni::BoardCellState > engine::board::GameBoard_t::GetCellState( int xPos, int yPos ) const {    
     if(!IsValidPosition( xPos, yPos ) ) {
         return nullptr;

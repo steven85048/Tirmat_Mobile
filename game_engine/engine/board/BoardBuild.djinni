@@ -34,5 +34,5 @@ BoardCellState = record {
 
 GameEngineState = record {
     IsDirty: bool;
-    Board: list< list< ResourceType > >;
+    Board: list< list< BoardCellState > >;
 }

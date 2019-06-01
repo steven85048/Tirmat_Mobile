@@ -15,11 +15,9 @@ class SurfaceEventController {
     var mGameElementManager : GameElementManager? = null
     var mGameInteractor : GameInteractorIntf? = null
 
-    constructor( aGameElementManager : GameElementManager? ) {
+    constructor( aGameElementManager : GameElementManager?, aGameEngineInteractor : GameInteractorIntf ) {
         mGameElementManager = aGameElementManager
-
-        var engine = GameEngineFactoryIntf.Create()
-        mGameInteractor = engine.GetGameInteractor()
+        mGameInteractor = aGameEngineInteractor
     }
 
     // Handler for events received from the SurfaceView (MotionEvent)

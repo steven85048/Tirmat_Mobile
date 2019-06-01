@@ -12,13 +12,13 @@ engine::state::GameEngineFactory_t::GameEngineFactory_t() {
     auto theInitializedEngine = theInitializationFactory.InitializeDefault();
 
     mStateContainer = std::move( theInitializedEngine.mStateContainer );
-    mGameActionInteractor = std::make_shared< engine::state::GameActionInteractor_t >( std::move( theInitializedEngine.mMoveManager ) );
+    mGameActionInteractor = std::make_shared< engine::state::GameActionInteractor_t >( std::move( theInitializedEngine.mMoveManager ), mStateContainer );
 
 }
 
 // Adds another listener that can receive events from the engine
 void engine::state::GameEngineFactory_t::AddEngineStateListener( const std::shared_ptr< djinni::GameStateListenerIntf > & aListener  ) {
-    
+    mGameActionInteractor->AddObserver( aListener );
 }
 
 // Retrieve the object that can be used to interact with the engine

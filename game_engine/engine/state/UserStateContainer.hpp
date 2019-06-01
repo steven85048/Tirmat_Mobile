@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "djinni/GameEngineState.hpp"
 #include "djinni/ResourceType.hpp"
 #include "djinni/BoardCellState.hpp"
 #include "engine/board/GameBoard.hpp"
@@ -28,6 +29,7 @@ UserStateContainer_t( std::shared_ptr< engine::board::GameBoard_t > aGameBoard,
                       std::shared_ptr< std::vector< djinni::BoardCellState > > aGeneratingLocations );
 
 void PrintState();
+djinni::GameEngineState GetState();
 
 // --------------------------------------------------------
 private: // FUNCTIONS

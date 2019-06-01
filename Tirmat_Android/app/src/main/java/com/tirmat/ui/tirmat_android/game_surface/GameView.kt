@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import com.tirmat.ui.generated.djinni.GameEngineFactoryIntf
+import com.tirmat.ui.tirmat_android.game_surface.surface_event.GameStateObserver
 import com.tirmat.ui.tirmat_android.game_surface.surface_event.SurfaceEventController
 
 // Holds and handles events from the game SurfaceView
@@ -16,15 +18,23 @@ class GameView : SurfaceView, SurfaceHolder.Callback {
     private var mGameElementManager : GameElementManager? = null;
     private var mSurfaceEventController : SurfaceEventController? = null;
     private var mSurfaceHolder : SurfaceHolder? = null
+    private var mGameEngineFactory : GameEngineFactoryIntf? = null
 
     private var mRenderThread : RenderThread? = null
 
     constructor(aContext : Context?): super(aContext){
         mContext = context
 
+        // TODO: IOC with Dagger2?
+
         mRenderThread = RenderThread(this)
-        mGameElementManager = GameElementManager(this)
-        mSurfaceEventController = SurfaceEventController(mGameElementManager)
+        mGameEngineFactory = GameEngineFactoryIntf.Create()
+        mGameElementManager = GameElementManager(this )
+
+        var theGameStateObserver: GameStateObserver = GameStateObserver( mGameElementManager!! )
+        mGameEngineFactory!!.AddEngineStateListener( theGameStateObserver )
+
+        mSurfaceEventController = SurfaceEventController(mGameElementManager, mGameEngineFactory!!.GetGameInteractor() )
 
         mSurfaceHolder = getHolder()
         mSurfaceHolder?.addCallback(this)

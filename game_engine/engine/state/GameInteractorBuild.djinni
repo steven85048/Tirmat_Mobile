@@ -8,7 +8,7 @@ GameInteractorIntf = interface +c {
 
 # Engine -> UI communication of state
 GameStateListenerIntf = interface +j +o {
-    GetState(): GameEngineState;
+    GetState( aState : GameEngineState );
 }
 
 # Entry point of the engine; provides the engine dependencies
